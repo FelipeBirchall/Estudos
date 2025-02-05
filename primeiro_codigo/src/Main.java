@@ -29,7 +29,7 @@ public class Main{
      for(int i = 0; i < n; i++)
      {
         System.out.println("\nDigite o valor " + i + ":");
-        array[i] = scanner.nextInt(); 
+        array[i] = scanner.nextInt(); //qasfgfdwqs//
      }
   }
 

@@ -1,4 +1,4 @@
-package terceiro_codigo;
+package Conversao_Dias;
 import java.util.Scanner;
 
 public class Main{

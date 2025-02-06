@@ -1,4 +1,4 @@
-package segundo_codigo;
+package Notas_Moedas;
 import java.util.Scanner;
 
 public class Main{

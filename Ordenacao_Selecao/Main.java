@@ -1,4 +1,4 @@
-package Pesquisa_Binaria;
+package Ordenacao_Selecao;
 
 import java.util.Scanner;
 
@@ -49,12 +49,14 @@ public class Main{
            array[menor] = array[i];
            array[i] = temp; 
         }
-
-        for(int i = 0; i < array.length; i++)
-        {
+        
+        /*
+         for(int i = 0; i < array.length; i++)
+          {
             System.out.println(array[i]);
-        }
-
+          }
+        */
+        
     }
 
     //Pesquisa Binária

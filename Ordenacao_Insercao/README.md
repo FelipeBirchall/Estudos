@@ -1,0 +1,3 @@
+## Ordenação por Inserção e Pesquisa Binária
+
+Este código tem como objetivo encontrar um valor específico em um vetor de forma eficiente, utilizando a **Pesquisa Binária**. Para garantir o funcionamento correto da pesquisa binária, o código usufrui do elemento **Ordenação por Inserção**. O programa permite ao usuário inserir os valores do vetor e o valor a ser buscado, retornando se o valor foi encontrado ou não. O intuito principal é demonstrar a combinação de ordenação e busca eficiente em um conjunto de dados.

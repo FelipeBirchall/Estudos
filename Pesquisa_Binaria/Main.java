@@ -1,4 +1,5 @@
-package Area_Testes;
+package Pesquisa_Binaria;
+
 import java.util.Scanner;
 
 public class Main{
@@ -31,7 +32,7 @@ public class Main{
         
     }
 
-    // Algoritmo De Seleção
+    // Ordenação Por Seleção
     static void ordenar(int array[])
     {
         for(int i = 0; i < array.length - 1; i++)

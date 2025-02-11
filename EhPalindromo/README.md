@@ -1,0 +1,3 @@
+## Verificador de Palíndromos em Java com Entrada Contínua
+
+Este código verifica se uma palavra ou frase é um palíndromo (ou seja, se pode ser lida da mesma forma de trás para frente). O programa continua solicitando entradas do usuário até que a palavra "FIM" seja digitada. Para cada entrada, ele remove espaços, converte para minúsculas e compara os caracteres para determinar se é um palíndromo, exibindo "SIM" ou "NÃO" como resposta.

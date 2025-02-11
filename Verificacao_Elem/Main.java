@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main{
    
    static Scanner scanner = new Scanner(System.in);
-  public static void main(String[] args)
+  static public void main(String[] args)
   {
       int n = tamanho();
       int[] array = new int[n];

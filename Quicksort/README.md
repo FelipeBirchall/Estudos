@@ -1,0 +1,3 @@
+## Ordenação e Busca Eficiente: QuickSort com Pesquisa Binária em Java
+
+Este código implementa uma solução completa para ordenação e busca em arrays. Ele utiliza o algoritmo **QuickSort** para ordenar os elementos de um array de forma eficiente.Após a ordenação, o programa realiza uma **Pesquisa Binária** para verificar se um valor específico está presente no array. O código é **interativo**, permitindo que o usuário insira o tamanho do array, seus valores e o valor a ser buscado, demonstrando de forma prática a eficiência desses algoritmos combinados.

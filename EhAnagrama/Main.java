@@ -21,19 +21,35 @@ public class Main {
 
     }
 
-    static boolean ehAnagrama(String frase1, String frase2) {
-
-        if (frase1.length() != frase2.length()) {
+    static boolean ehAnagrama(String frase1 ,String frase2)
+    {
+        int n = frase1.length();
+        int cont = 0;
+        if(n != frase2.length())
+        {
             return false;
         }
+        char[] letra1 = new char[n];
+        char[] letra2 = new char[n];
 
-        // Converte as strings em arrays de caracteres e os ordena
-        char[] array1 = frase1.toCharArray();
-        char[] array2 = frase2.toCharArray();
-        Arrays.sort(array1);
-        Arrays.sort(array2);
-
-        // Compara os arrays ordenados
-        return Arrays.equals(array1, array2);
+        for (int i = 0; i < n; i++){
+            letra1[i] = frase1.charAt(i);
+            letra2[i] = frase2.charAt(i);
+        }
+    
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(letra1[i] == letra2[j]){
+                    cont++;
+                    j = n;
+                }
+            }
+           if(cont < 1){return false;}
+           cont = 0;
+        }
+        return true;
     }
+
 }

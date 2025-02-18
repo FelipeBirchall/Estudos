@@ -27,7 +27,7 @@ public class Main {
             if (palavra.charAt(i) != palavra.charAt(palavra.length() - 1 - i)) {
                 return false;
             }
-            EhPalindromo(palavra, i + 1);
+           return EhPalindromo(palavra, i + 1);
         }
         return true;
     }

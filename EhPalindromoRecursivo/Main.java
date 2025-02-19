@@ -10,7 +10,7 @@ public class Main {
 
         while (!palavra.equalsIgnoreCase("FIM")) {
 
-            if (EhPalindromo(palavra, 0)) {
+            if (EhPalindromo(palavra, 0 , true)) {
                 System.out.println("SIM");
             } else {
                 System.out.println("NAO");
@@ -21,14 +21,14 @@ public class Main {
         scanner.close();
     }
 
-    static boolean EhPalindromo(String palavra, int i) {
+    static boolean EhPalindromo(String palavra, int i, boolean palindromo) {
         if (i < palavra.length()) {
             
             if (palavra.charAt(i) != palavra.charAt(palavra.length() - 1 - i)) {
-                return false;
+                palindromo =  false;
             }
-           return EhPalindromo(palavra, i + 1);
+           return EhPalindromo(palavra, i + 1 , palindromo);
         }
-        return true;
+        return palindromo;
     }
 }

@@ -1,16 +1,16 @@
 package Ciframento;
-import java.util.Scanner;
+import java.util.*;
 
-public class Main{
-
-    static public void main(String[] args)
-    {
+public class Main {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
         String palavra = scanner.nextLine();
         while(!palavra.equalsIgnoreCase("FIM"))
         {
-            System.out.println(Ciframento(palavra));
-            palavra = scanner.nextLine();
+             System.out.println(Ciframento(palavra));
+
+             palavra = scanner.nextLine();
         }
         scanner.close();
     }
@@ -21,21 +21,11 @@ public class Main{
         for(int i = 0; i < palavra.length(); i++)
         {
             char letra = palavra.charAt(i);
-            if (letra >= 'a' && letra <= 'z') {
-                letra = (char) (letra + 3); 
-                if (letra > 'z') {
-                    letra -= 26; 
-                }
-            }
-
-            else if (letra >= 'A' && letra <= 'Z') {
-                letra = (char) (letra + 3); 
-                if (letra > 'Z') {
-                    letra -= 26; 
-                }
+            if((letra >=32 && letra <=127)){
+                letra = (char)(letra+3);
             }
             palavraCifrada += letra;
         }
         return palavraCifrada;
     }
-  }
+}

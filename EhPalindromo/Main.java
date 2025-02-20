@@ -1,4 +1,4 @@
-package EhPalindromo;
+
 import java.util.Scanner;
 
 public class Main{
@@ -9,7 +9,7 @@ public class Main{
         while(!palavra.equalsIgnoreCase("FIM"))
         {
             if(EhPalindromo(palavra)){System.out.println("SIM");}
-            else {System.out.println("NÃO");}
+            else {System.out.println("NAO");}
             palavra = scanner.nextLine();
         }
         scanner.close();

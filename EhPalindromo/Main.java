@@ -21,7 +21,7 @@ public class Main {
 
     }
 
-    // Método para verificar se uma palavra é um palíndromo
+    // Função para verificar se uma palavra é um palíndromo
     static boolean EhPalindromo(String palavra) {
         boolean palindromo = true;
         int esq = 0; 
@@ -30,14 +30,16 @@ public class Main {
         // Compara os caracteres da esquerda para a direita e da direita para a esquerda
         while (esq < dir) {
            
+            // Se os caracteres nas posições atuais não forem iguais, a palavra não é um palíndromo
             if (palavra.charAt(esq) != palavra.charAt(dir)) {
                 palindromo = false;
+                esq = palavra.length();
             }
-            // Adiciona +1 na esq e -1 na dir enquanto não houver diferença
+            // Move os índices para o próximo par de caracteres enquanto não houver diferença
             esq++;
             dir--;
         }
-       
+        // Retorna true se for palíndromo, caso contrário, false
         return palindromo;
 
     }

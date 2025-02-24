@@ -23,6 +23,7 @@ public class Main {
 
     static boolean ehAnagrama(String frase1 ,String frase2)
     {
+        boolean anagrama = true;
         int n = frase1.length();
         int cont = 0;
         if(n != frase2.length())
@@ -46,10 +47,10 @@ public class Main {
                     j = n;
                 }
             }
-           if(cont < 1){return false;}
+           if(cont < 1){anagrama = false;}
            cont = 0;
         }
-        return true;
+        return anagrama;
     }
 
 }

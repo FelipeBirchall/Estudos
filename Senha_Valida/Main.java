@@ -4,47 +4,72 @@ import java.util.*;
 public class Main {
 
     static public void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
-        String Senha = scanner.nextLine();
+        String senha = scanner.nextLine();
 
-        if (senhaValida(Senha)) {
-            System.out.println("SIM");
-        } else {
-            System.out.println("NAO");
+        // Loop que continua até o usuário digitar "FIM"
+        while(!senha.equalsIgnoreCase("FIM")){
+
+            // Verifica se a senha é válida e exibe o resultado
+            if (senhaValida(senha)) {
+                System.out.println("SIM"); 
+            } else {
+                System.out.println("NÃO");
+            }
+
+            senha = scanner.nextLine();
         }
 
         scanner.close();
-
     }
 
-    static boolean senhaValida(String Senha) {
+    // Método que verifica se uma senha é válida
+    static boolean senhaValida(String senha) {
+        
+        // Variáveis para verificar os critérios de validação
+        boolean ehValida = true;
+        boolean tamanhoValido = true;
         boolean temMaiuscula = false;
         boolean temMinuscula = false;
         boolean temNumero = false;
         boolean temSimbolo = false;
-        if (Senha.length() < 8) {
-            return false;
-        }
-        for (int i = 0; i < Senha.length(); i++) {
 
-            if (Senha.charAt(i) >= 'a' && Senha.charAt(i) <= 'z') {
+        // Verifica se a senha tem pelo menos 8 caracteres
+        if (senha.length() < 8) {
+            tamanhoValido = false; // Senha inválida se tiver menos de 8 caracteres
+        }
+
+        // Itera sobre cada caractere da senha
+        for (int i = 0; i < senha.length(); i++) {
+            if(tamanhoValido == false)
+            {
+                i = senha.length();     
+            }
+            // Verifica se o caractere é uma letra minúscula
+            else if (senha.charAt(i) >= 'a' && senha.charAt(i) <= 'z') {
                 temMinuscula = true;
             } 
-            else if (Senha.charAt(i) >= 'A' && Senha.charAt(i) <= 'Z') {
+            // Verifica se o caractere é uma letra maiúscula
+            else if (senha.charAt(i) >= 'A' && senha.charAt(i) <= 'Z') {
                 temMaiuscula = true;
             } 
-            else if (Senha.charAt(i) >= '0' && Senha.charAt(i) <= '9') {
+            // Verifica se o caractere é um número
+            else if (senha.charAt(i) >= '0' && senha.charAt(i) <= '9') {
                 temNumero = true;
             } 
+            // Se não for letra nem número, considera como símbolo
             else {
                 temSimbolo = true;
             }
         }
-        if (temMaiuscula == false || temMinuscula == false || temNumero == false || temSimbolo == false) {
-            return false;
+        // Verifica se todos os critérios foram atendidos
+        if (tamanhoValido == false || temMinuscula == false || temMaiuscula == false || temNumero == false || temSimbolo == false) {
+            ehValida = false; // Senha inválida se algum critério não for atendido
         }
-        return true;
+
+        return ehValida; // Retorna true se a senha for válida, caso contrário, false
     }
 
 }

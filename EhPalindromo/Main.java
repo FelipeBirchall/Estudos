@@ -6,7 +6,7 @@ public class Main {
         String palavra = scanner.nextLine();
 
         // Loop continua até que o usuário digite "FIM"
-        while (!palavra.equalsIgnoreCase("FIM")) {
+        while (finalizar(palavra) == false) {
 
             // Verifica se a palavra é um palíndromo e imprime "SIM" ou "NAO" conforme o resultado
             if (EhPalindromo(palavra)) {
@@ -43,4 +43,18 @@ public class Main {
         return palindromo;
 
     }
+
+        // Verifica se a palavra é "FIM"
+    static boolean finalizar(String palavra) {  
+    boolean FIM = false;
+
+    // Confere se os três primeiros caracteres são 'F', 'I' e 'M' e se a string tem exatamente 3 caracteres
+    if (palavra.charAt(0) == 'F' &&  palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M' && 
+        palavra.length() == 3)
+    {  
+        FIM = true;  
+    }
+
+    return FIM;  
+}
 }

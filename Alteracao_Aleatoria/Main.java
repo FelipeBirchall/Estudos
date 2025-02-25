@@ -1,4 +1,5 @@
 package Alteracao_Aleatoria;
+
 import java.util.*;
 
 public class Main {
@@ -9,10 +10,11 @@ public class Main {
 
         String frase = scanner.nextLine();
 
-        gerador.setSeed(4); // Define uma semente fixa para o gerador de números aleatórios (para resultados consistentes)
+        gerador.setSeed(4); // Define uma semente fixa para o gerador de números aleatórios (para resultados
+                            // consistentes)
 
         // Loop continua até que o usuário digite "FIM"
-        while (!frase.equalsIgnoreCase("FIM")) {
+        while (finalizar(frase) == false) {
 
             // Gera dois caracteres aleatórios entre 'a' e 'z'
             char c1 = ((char) ('a' + (Math.abs(gerador.nextInt()) % 26)));
@@ -27,7 +29,6 @@ public class Main {
             // Aplica a alteração aleatória na frase e imprime o resultado
             System.out.println(alteracaoAleatoria(frase, c1, c2));
 
-            
             frase = scanner.nextLine();
         }
 
@@ -57,5 +58,19 @@ public class Main {
         }
 
         return fraseFinal; // Retorna a frase com as substituições aplicadas
+    }
+
+    // Verifica se a frase é "FIM"
+    static boolean finalizar(String frase) {
+        boolean FIM = false;
+
+        // Confere se os três primeiros caracteres são 'F', 'I' e 'M' e se a string tem
+        // exatamente 3 caracteres
+        if (frase.charAt(0) == 'F' && frase.charAt(1) == 'I' && frase.charAt(2) == 'M' &&
+                frase.length() == 3) {
+            FIM = true;
+        }
+
+        return FIM;
     }
 }

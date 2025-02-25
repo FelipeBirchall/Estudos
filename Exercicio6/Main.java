@@ -1,18 +1,17 @@
 package Exercicio6;
+
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        
         Scanner scanner = new Scanner(System.in);
 
-        
         String palavra = scanner.nextLine();
 
         // Loop que continua até que o usuário digite "FIM"
-        while (!palavra.equalsIgnoreCase("FIM")) {
+        while (finalizar(palavra) == false) {
 
             // Verifica se a palavra contém apenas vogais e imprime "SIM" ou "NAO"
             if (soVogal(palavra)) {
@@ -42,7 +41,6 @@ public class Main {
                 System.out.print("NAO\n");
             }
 
-           
             palavra = scanner.nextLine();
         }
 
@@ -70,11 +68,12 @@ public class Main {
         char[] letras = new char[palavra.length()];
         for (int i = 0; i < palavra.length(); i++) {
             letras[i] = palavra.charAt(i);
-            // Verifica se o caractere atual é uma vogal (maiúscula ou minúscula) ou um número ou um ponto/vírgula
+            // Verifica se o caractere atual é uma vogal (maiúscula ou minúscula) ou um
+            // número ou um ponto/vírgula
             if (letras[i] == 'a' || letras[i] == 'e' || letras[i] == 'i' || letras[i] == 'o' || letras[i] == 'u' ||
                     letras[i] == 'A' || letras[i] == 'E' || letras[i] == 'I' || letras[i] == 'O' || letras[i] == 'U'
                     || letras[i] >= '0' && letras[i] <= '9' || letras[i] == '.' || letras[i] == ',') {
-                consoantes =  false;
+                consoantes = false;
             }
         }
         return consoantes;
@@ -96,21 +95,34 @@ public class Main {
     static boolean ehReal(String palavra) {
         boolean pontoOuVirgula = false;
         boolean Real = true;
-        for(int i = 0; i < palavra.length(); i++) {
+        for (int i = 0; i < palavra.length(); i++) {
             // Verifica se o caractere atual é um ponto ou vírgula
-            if(palavra.charAt(i) == '.' || palavra.charAt(i) == ',') {
+            if (palavra.charAt(i) == '.' || palavra.charAt(i) == ',') {
                 // Se já houve um ponto ou vírgula anteriormente, não é um número real válido
-                if(pontoOuVirgula){
-                     Real = false;
+                if (pontoOuVirgula) {
+                    Real = false;
                 }
                 pontoOuVirgula = true;
             }
             // Verifica se o caractere atual não é um dígito
-            else if(palavra.charAt(i) < '0' || palavra.charAt(i) > '9')
-            {
+            else if (palavra.charAt(i) < '0' || palavra.charAt(i) > '9') {
                 Real = false;
-            }       
+            }
         }
         return Real;
+    }
+
+    // Verifica se a palavra é "FIM"
+    static boolean finalizar(String palavra) {
+        boolean FIM = false;
+
+        // Confere se os três primeiros caracteres são 'F', 'I' e 'M' e se a string tem
+        // exatamente 3 caracteres
+        if (palavra.charAt(0) == 'F' && palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M' &&
+                palavra.length() == 3) {
+            FIM = true;
+        }
+
+        return FIM;
     }
 }

@@ -1,31 +1,30 @@
 package Inversao_String;
+
 import java.util.*;
 
 public class Main {
 
     static public void main(String[] args) {
-        
+
         Scanner scanner = new Scanner(System.in);
 
-        
         String palavra = scanner.nextLine();
-        
+
         // Loop que continua até que o usuário digite "FIM"
-        while(!palavra.equalsIgnoreCase("FIM"))
-        {
-             // Chama o método Inverter para inverter a palavra
-             palavra = Inverter(palavra);
+        while (finalizar(palavra) == false) {
+            // Chama o método Inverter para inverter a palavra
+            palavra = Inverter(palavra);
 
-             System.out.println(palavra);
+            System.out.println(palavra);
 
-             palavra = scanner.nextLine();
+            palavra = scanner.nextLine();
         }
 
         scanner.close();
     }
 
     // Método para inverter uma string
-    static String Inverter(String palavra){
+    static String Inverter(String palavra) {
 
         // Variável para armazenar a palavra invertida
         String palavraInvertida = "";
@@ -41,5 +40,19 @@ public class Main {
         }
 
         return palavraInvertida;
+    }
+
+    // Verifica se a palavra é "FIM"
+    static boolean finalizar(String palavra) {
+        boolean FIM = false;
+
+        // Confere se os três primeiros caracteres são 'F', 'I' e 'M' e se a string tem
+        // exatamente 3 caracteres
+        if (palavra.charAt(0) == 'F' && palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M' &&
+                palavra.length() == 3) {
+            FIM = true;
+        }
+
+        return FIM;
     }
 }

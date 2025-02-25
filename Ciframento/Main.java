@@ -7,8 +7,8 @@ public class Main {
         
         String palavra = scanner.nextLine();
         
-        // Loop continua até que o usuário digite "FIM" (case insensitive)
-        while(!palavra.equalsIgnoreCase("FIM"))
+        // Loop continua até que o usuário digite "FIM" 
+        while(finalizar(palavra) == false)
         {
             // Aplica o ciframento na palavra e imprime o resultado
             System.out.println(Ciframento(palavra));
@@ -40,4 +40,19 @@ public class Main {
         // Retorna a palavra cifrada
         return palavraCifrada;
     }
+
+    // Verifica se a palavra é "FIM"
+    static boolean finalizar(String palavra) {  
+    boolean FIM = false;
+
+    // Confere se os três primeiros caracteres são 'F', 'I' e 'M' e se a string tem exatamente 3 caracteres
+    if (palavra.charAt(0) == 'F' &&  palavra.charAt(1) == 'I' && palavra.charAt(2) == 'M' && 
+        palavra.length() == 3)
+    {  
+        FIM = true;  
+    }
+
+    return FIM;  
+}
+
 }

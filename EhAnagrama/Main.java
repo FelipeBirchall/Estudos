@@ -42,18 +42,39 @@ public class Main {
         // Copia a parte da frase após o '-' para frase2
         for (int i = posicao + 2; i < n; i++) {
             char letra = frase.charAt(i);
+            // Se a letra for maiúscula, converterá em minúscula a partir dos valores da tabela ASCII
+            if(letra >= 'A' && letra <= 'Z')
+            {
+                letra = (char)(letra + 32);
+            }
             frase2 += letra; // Atribui cada character em frase2
         }
+
 
         // Reconstruir a primeira parte da frase (antes do '-')
         String frase1 = "";
         for (int i = 0; i < posicao - 1; i++) {
-            frase1 += frase.charAt(i);// Atribui cada character em frase1
+            char letra = frase.charAt(i);
+            // Se a letra for maiúscula, converterá em minúscula a partir dos valores da tabela ASCII
+            if(letra >= 'A' && letra <= 'Z')
+            {
+                letra = (char)(letra + 32);
+            }
+            frase1 += letra;// Atribui cada character em frase1 
         }
 
+        // Usado para verificar se as palavras foram feitas corretamente
+        /*
+            System.out.println(frase1);
+            System.out.println(frase2);
+         */
+        
+
         // Converte ambas as partes para minúsculas para evitar problemas com maiúsculas/minúsculas
-        frase1 = frase1.toLowerCase();
-        frase2 = frase2.toLowerCase();
+        for(int i = 0; i < n; i++)
+        {
+            
+        }
 
         n = frase1.length(); // Atualiza o tamanho da primeira parte
         int cont = 0; // Contador para verificar correspondências de caracteres
@@ -70,7 +91,7 @@ public class Main {
                 for (int j = 0; j < n; j++) {
                     if (frase1.charAt(i) == frase2.charAt(j)) {
                         cont++; // Incrementa o contador se encontrar uma correspondência
-                        j = n;
+                        j = n; 
                     }
                 }
                 // Se nenhuma correspondência for encontrada, não é um anagrama

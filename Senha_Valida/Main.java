@@ -17,7 +17,7 @@ public class Main {
             if (senhaValida(senha)) {
                 System.out.println("SIM");
             } else {
-                System.out.println("N"+(char)('a'+'b')+"O");
+                System.out.println("NAO");
             }
 
             senha = scanner.nextLine();

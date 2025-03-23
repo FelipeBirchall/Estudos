@@ -57,7 +57,7 @@ public class Main{
    
     static public void main(String[] args) throws Exception
     {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
         Fila fila = new Fila(5);
 
@@ -66,6 +66,8 @@ public class Main{
         fila.inserir(3);
         System.out.println(fila.remover());
         fila.mostrar();
+
+        sc.close();
 
     }
 }

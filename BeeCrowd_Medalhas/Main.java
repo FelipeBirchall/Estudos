@@ -85,19 +85,7 @@ public class Main {
         }
     }
 
-    static boolean compararNome(String nome1 , String nome2)
-    {
-        boolean emOrdem = false;
-        int len = Math.min(nome1.length(), nome2.length());
-        for(int i = 0; i < len; i++)
-        {
-            if(nome1.charAt(i) < nome2.charAt(i))
-            {
-                emOrdem = true;
-                i = len;
-            }
-        }
-        return emOrdem;
-        
+    static boolean compararNome(String nome1, String nome2) {
+        return nome1.compareTo(nome2) > 0;
     }
 }

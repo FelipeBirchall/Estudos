@@ -10,17 +10,9 @@ public class Main {
         {
             igual = false;
         }
-        for(int i = 0; i < linguas.length(); i++)
+        else if(linguas.compareTo(traducoesRequeridas) != 0)
         {
-            if(igual == false)
-            {
-                i = linguas.length();
-            }
-            else if(linguas.charAt(i) != traducoesRequeridas.charAt(i))
-            {
-                igual = false;
-                i = linguas.length();
-            }
+            igual = false;
         }
         return igual;
     }

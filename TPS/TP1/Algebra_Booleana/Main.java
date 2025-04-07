@@ -1,4 +1,4 @@
-package Algebra_Booleana;
+package TPS.TP1.Algebra_Booleana;
 import java.util.Scanner;
 
 public class Main {

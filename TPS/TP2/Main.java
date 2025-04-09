@@ -1,4 +1,7 @@
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
  
@@ -22,9 +25,8 @@ class SHOW{
 
     // FUNÇÕES SET
 
-    private void setID(String SHOW_ID)
-    {
-       this.SHOW_ID = SHOW_ID;
+    public void setID(String SHOW_ID) {
+        this.SHOW_ID = SHOW_ID;
     }
 
     private void setTYPE(String TYPE)
@@ -38,11 +40,19 @@ class SHOW{
 
     private void setTITLE(String TITLE)
     {
+        if(TITLE == "")
+        {
+          TITLE = "NaN";
+        }
         this.TITLE = TITLE;
     }
 
     private void setDIRECTOR(String[] DIRECTOR)
     {
+        if(DIRECTOR[0] == "")
+        {
+          DIRECTOR[0] = "NaN";
+        }
         this.DIRECTOR = new String[DIRECTOR.length];
         for(int i = 0; i < DIRECTOR.length; i++)
         {
@@ -52,6 +62,10 @@ class SHOW{
 
     private void setCAST(String[] CAST)
     {
+        if(CAST[0] == "")
+        {
+          CAST[0] = "NaN";
+        }
         this.CAST = new String[CAST.length];
         for(int i = 0; i < CAST.length; i++)
         {
@@ -61,12 +75,16 @@ class SHOW{
 
     private void setCOUNTRY(String COUNTRY)
     {
+        if(COUNTRY == "")
+        {
+          COUNTRY = "NaN";
+        }
         this.COUNTRY = COUNTRY;
     }
 
     private void setDATA_ADDED(String DATA_ADDED) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMMM d , yyyy", Locale.ENGLISH);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
             this.DATE_ADDED = sdf.parse(DATA_ADDED);
         } catch (ParseException e) {
             System.out.println("Erro ao converter a data: " + DATA_ADDED);
@@ -81,16 +99,28 @@ class SHOW{
 
     private void setRATING(String RATING)
     {
+        if(RATING == "")
+        {
+          RATING = "NaN";
+        }
         this.RATING = RATING;
     }
 
     private void setDURATION(String DURATION)
     {
+        if(DURATION == "")
+        {
+          DURATION = "NaN";
+        }
         this.DURATION = DURATION;
     }
 
     private void setLISTED_IN(String[] LISTED_IN)
     {
+        if(LISTED_IN[0] == "")
+        {
+          LISTED_IN[0] = "NaN";
+        }
         this.LISTED_IN = new String[LISTED_IN.length];
         for(int i = 0; i < LISTED_IN.length; i++)
         {
@@ -117,21 +147,22 @@ class SHOW{
 
     public void getDIRECTOR()
     {
+        System.out.print("[");
         for(int i = 0; i < DIRECTOR.length-1; i++)
         {
             System.out.print(DIRECTOR[i] + ", ");
         }
-        System.out.print(DIRECTOR[DIRECTOR.length-1]);
+        System.out.print(DIRECTOR[DIRECTOR.length-1] + "] ## ");
     }
-
+    
     public void getCAST()
     {
-        System.out.println();
+        System.out.print("[");
         for(int i = 0; i < CAST.length-1; i++)
         {
             System.out.print(CAST[i] + ", ");
         }
-        System.out.print(CAST[CAST.length-1]);
+        System.out.print(CAST[CAST.length-1] + "] ## ");
     }
 
     public String getCOUNTRY()
@@ -161,13 +192,14 @@ class SHOW{
 
     public void getLISTED_IN()
     {
+        System.out.print("[");
         for(int i = 0; i < LISTED_IN.length-1; i++)
         {
             System.out.print(LISTED_IN[i] + ", ");
         }
-        System.out.print(LISTED_IN[LISTED_IN.length-1]);
+        System.out.print(LISTED_IN[LISTED_IN.length-1]+ "]");
     }
-
+    
 
 
     //OUTRAS FUNÇÕES
@@ -208,27 +240,17 @@ class SHOW{
 
     public void imprimir()
     {
-        System.out.println(getID());
-        
-        System.out.println(getTYPE());
-
-        System.out.println(getTITLE());
-
+        System.out.print("=> " + getID() + " ## " + getTYPE() + " ## " + getTITLE() + " ## ");
         getDIRECTOR();
-
         getCAST();
+        System.out.print(getCOUNTRY() + " ## ");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        System.out.print(sdf.format(getDATA_ADDED()) + " ## ");
 
-        System.out.println("\n" + getCOUNTRY());
-
-        System.out.println(getDATA_ADDED());
-
-        System.out.println(getRELEASE_YEAR());
-
-        System.out.println(getRATING());
-
-        System.out.println(getDURATION());
-
+        System.out.print(getRELEASE_YEAR() + " ## " + getRATING() + " ## " + getDURATION() + " ## ");
         getLISTED_IN();
+        System.out.println();
     }
     
 
@@ -238,22 +260,54 @@ class SHOW{
 
 public class Main {
 
-    static public void main(String[] args)
-    {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        String entrada;
 
-       /*ArrayList<SHOW> shows = new ArrayList<>(); */ 
+       try {
+        while (!(entrada = sc.nextLine()).equals("FIM")) {
+            BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+            String linha = br.readLine(); // pula o cabeçalho
+            boolean encontrado = false;
 
+            while ((linha = br.readLine()) != null && !encontrado) {
+                if (linha.startsWith(entrada + ",")) {
+                    SHOW show = new SHOW();
+                    show.Leitura(linha);
+                    show.imprimir();
+                    encontrado = true;
+                }
+            }
+
+            br.close();
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
+    }
+
+    sc.close();
+
+
+        /* 
         String entrada = sc.nextLine();
 
-        SHOW show = new SHOW();
+        SHOW[] shows = new SHOW[400];
 
-        show.Leitura(entrada);
-
-        show.imprimir();
-
-        sc.close();
-
+        int index = 0;
+        while(!entrada.equals("FIM"))
+        {
+            shows[index] = new SHOW();
+            shows[index].Leitura(entrada);
+            index++;
+            entrada = sc.nextLine();
+        }
+        for(int i = 0; i < index; i++)
+        {
+            shows[i].imprimir();
+        }
+       
+       sc.close();        
+        */
     }
-    
 }
+

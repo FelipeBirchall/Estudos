@@ -16,13 +16,12 @@ class SHOW {
     private String DURATION;
     private String[] LISTED_IN;
 
-
     public SHOW() {
     }
 
     public SHOW(String SHOW_ID, String TYPE, String TITLE, String[] DIRECTOR, String[] CAST, String COUNTRY,
             Date DATE_ADDED, int RELEASE_YEAR, String RATING, String DURATION, String[] LISTED_IN) {
-                
+
         setID(SHOW_ID);
         setTYPE(TYPE);
         setTITLE(TITLE);
@@ -36,8 +35,7 @@ class SHOW {
         setLISTED_IN(LISTED_IN);
     }
 
-    public SHOW clone()
-    {
+    public SHOW clone() {
         SHOW clonado = new SHOW();
 
         clonado.setID(this.SHOW_ID);
@@ -55,8 +53,6 @@ class SHOW {
         return clonado;
 
     }
-
-    
 
     // FUNÇÕES SET
 
@@ -89,6 +85,10 @@ class SHOW {
     }
 
     private void setCAST(String[] CAST) {
+        for (int i = 0; i < CAST.length; i++) {
+            CAST[i] = CAST[i].trim();
+        }
+        ordenar(CAST);
         if (CAST[0] == "") {
             CAST[0] = "NaN";
         }
@@ -106,14 +106,12 @@ class SHOW {
     }
 
     private void setDATE_ADDED(Date DATE_ADDED) {
-        if(DATE_ADDED == null)
-        {
+        if (DATE_ADDED == null) {
             this.DATE_ADDED = null;
-        }
-        else{
+        } else {
             this.DATE_ADDED = DATE_ADDED;
         }
-        
+
     }
 
     private void setRELEASE_YEAR(int RELEASE_YEAR) {
@@ -135,6 +133,10 @@ class SHOW {
     }
 
     private void setLISTED_IN(String[] LISTED_IN) {
+        for (int i = 0; i < LISTED_IN.length; i++) {
+            LISTED_IN[i] = LISTED_IN[i].trim();
+        }
+        ordenar(LISTED_IN);
         if (LISTED_IN[0] == "") {
             LISTED_IN[0] = "NaN";
         }
@@ -159,11 +161,10 @@ class SHOW {
     }
 
     public void getDIRECTOR() {
-        System.out.print("[");
         for (int i = 0; i < DIRECTOR.length - 1; i++) {
             System.out.print(DIRECTOR[i] + ", ");
         }
-        System.out.print(DIRECTOR[DIRECTOR.length - 1] + "] ## ");
+        System.out.print(DIRECTOR[DIRECTOR.length - 1] + " ## ");
     }
 
     public void getCAST() {
@@ -199,7 +200,7 @@ class SHOW {
         for (int i = 0; i < LISTED_IN.length - 1; i++) {
             System.out.print(LISTED_IN[i] + ", ");
         }
-        System.out.print(LISTED_IN[LISTED_IN.length - 1] + "]");
+        System.out.print(LISTED_IN[LISTED_IN.length - 1] + "] ##");
     }
 
     // OUTRAS FUNÇÕES
@@ -231,18 +232,17 @@ class SHOW {
         setCOUNTRY(partes.get(5));
 
         Date date_added = null;
-        if(partes.get(6) != null && !partes.get(6).isEmpty())
-        {
+        if (partes.get(6) != null && !partes.get(6).isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
                 date_added = sdf.parse(partes.get(6));
             } catch (ParseException e) {
-                System.out.println("Erro ao converter a data do " + getID() );
+                System.out.println("Erro ao converter a data do " + getID());
                 date_added = null;
             }
         }
         setDATE_ADDED(date_added);
-        
+
         setRELEASE_YEAR(Integer.parseInt(partes.get(7)));
         setRATING(partes.get(8));
         setDURATION(partes.get(9));
@@ -250,8 +250,24 @@ class SHOW {
 
     }
 
+    private void ordenar(String[] Lista) {
+        for (int i = 0; i < Lista.length - 1; i++) {
+            int menor = i;
+            for (int j = i + 1; j < Lista.length; j++) {
+                if (Lista[menor].compareTo(Lista[j]) > 0) {
+                    menor = j;
+                }
+            }
+
+            String temp = Lista[menor];
+            Lista[menor] = Lista[i];
+            Lista[i] = temp;
+        }
+
+    }
+
     public void imprimir() {
-        System.out.print("=> " + getID() + " ## " + getTYPE() + " ## " + getTITLE() + " ## ");
+        System.out.print("=> " + getID() + " ## " + getTITLE() + " ## " + getTYPE() + " ## ");
         getDIRECTOR();
         getCAST();
         System.out.print(getCOUNTRY() + " ## ");
@@ -262,74 +278,69 @@ class SHOW {
         } else {
             System.out.print("NaN ## ");
         }
-        
 
         System.out.print(getRELEASE_YEAR() + " ## " + getRATING() + " ## " + getDURATION() + " ## ");
         getLISTED_IN();
         System.out.println();
     }
 
-
-
 }
 
-public class Main {
+public class Questao7 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        SHOW[] shows = new SHOW[1370];
+        String entrada;
+
+        SHOW[] shows = new SHOW[300];
         int index = 0;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
-            String linha = br.readLine(); // pula o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                shows[index] = new SHOW();
-                shows[index].Leitura(linha);
-                index++;
-            }
+            while (!(entrada = sc.nextLine()).equals("FIM")) {
+                BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+                String linha = br.readLine(); // pula o cabeçalho
+                boolean encontrado = false;
 
-            br.close();
+                linha = br.readLine(); // lê a primeira linha de dados
+                while (linha != null && !encontrado) {
+                    if (linha.startsWith(entrada + ",")) {
+                        shows[index] = new SHOW();
+                        shows[index].Leitura(linha);
+                        encontrado = true;
+                        index++;
+                    } else {
+                        linha = br.readLine(); // só continua lendo se ainda não encontrou
+                    }
+                }
+
+                if (!encontrado) {
+                    System.out.println("Show ID " + entrada + " não encontrado.");
+                }
+
+                br.close();
+            }
         } catch (IOException e) {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
-        String entrada = sc.nextLine();
-        while(!entrada.equals("FIM"))
+
+        //Ordenar
+        for(int i = 1; i < index; i++)
         {
-            for(int i = 0; i < index; i++)
+            SHOW temp = shows[i];
+            int j = i-1;
+            while(j >=0 && (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) > 0 ||
+            (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) == 0 &&
+             shows[j].getTITLE().compareToIgnoreCase(temp.getTITLE()) > 0)))
             {
-                if(entrada.equals(shows[i].getID()))
-                {
-                    shows[i].imprimir();
-                    i = index;
-                }
+                shows[j+1] = shows[j];
+                j--;
             }
-            entrada = sc.nextLine();
-        }
-
-        sc.close();
-
-         
-
-        /*
-        String entrada = sc.nextLine();
-          
-        SHOW[] shows = new SHOW[400];
-        
-        int index = 0;
-        while(!entrada.equals("FIM"))
-        {
-        shows[index] = new SHOW();
-        shows[index].Leitura(entrada);
-        index++;
-        entrada = sc.nextLine();
+            shows[j+1] = temp;
         }
         for(int i = 0; i < index; i++)
         {
-        shows[i].imprimir();
+            shows[i].imprimir();
         }
-        
-        sc.close(); 
-        */
+        sc.close();
     }
 }

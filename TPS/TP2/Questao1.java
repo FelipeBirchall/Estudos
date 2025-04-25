@@ -310,7 +310,7 @@ public class Questao1 {
         int index = 0;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
             String linha = br.readLine(); // pula o cabeçalho
             while ((linha = br.readLine()) != null) {
                 shows[index] = new SHOW();

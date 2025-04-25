@@ -167,6 +167,11 @@ class SHOW {
         System.out.print(DIRECTOR[DIRECTOR.length - 1] + " ## ");
     }
 
+    public String getFirstDirector()
+    {
+        return DIRECTOR[0];
+    }
+
     public void getCAST() {
         System.out.print("[");
         for (int i = 0; i < CAST.length - 1; i++) {
@@ -286,10 +291,9 @@ class SHOW {
 
 }
 
-public class Questao7 {
-
-    static int comparacoes = 0;
-
+public class Questao9 {
+    
+        static int comparacoes = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String entrada;
@@ -326,8 +330,9 @@ public class Questao7 {
         } catch (IOException e) {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
- 
-        ordenar(index, shows);
+
+        ordenar(shows, index);
+
 
         for(int i = 0; i < index; i++)
         {
@@ -339,35 +344,118 @@ public class Questao7 {
 
         //Criando arquivo.txt
         try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_insercao.txt", "UTF-8");
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_heapsort.txt", "UTF-8");
             arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
             arquivo.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         sc.close();
     }
 
-
-    //Ordenacao por Inserscao
-    static void ordenar(int index, SHOW[] shows)
+    //Heapsort
+    static void ordenar(SHOW[] shows, int n)
     {
-        
-        for(int i = 1; i < index; i++)
+        SHOW[] ordenado = new SHOW[n];
+        for(int i = 0; i < n; i++)
         {
-            SHOW temp = shows[i];
-            int j = i-1;
-            while(j >=0 && (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) > 0 ||
-            (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) == 0 &&
-             shows[j].getTITLE().compareToIgnoreCase(temp.getTITLE()) > 0)))
-            {
-                shows[j+1] = shows[j];
-                j--;
-                comparacoes++;
-            }
-            shows[j+1] = temp;
+            ordenado[i] = shows[i].clone();
         }
+
+        //Construcao
+        for(int tam = 1; tam <= n; tam++)
+        {
+            construir(ordenado, tam);
+        }
+
+        int tam = n;
+        while(tam > 1)
+        {
+            comparacoes++;
+            SHOW temp = ordenado[0];
+            ordenado[0] = ordenado[tam-1];
+            ordenado[tam-1] = temp;
+            tam--;
+            reconstruir(ordenado, tam); 
+        }
+        for(int i = 0; i < n; i++)
+        {
+            shows[i] = ordenado[i];
+        }
+
     }
+    
+
+    static void construir(SHOW[] ordenado, int tam)
+    {
+        for(int i = tam - 1; i > 0; i = (i - 1) / 2)
+        {
+            comparacoes++;
+            int pai = (i-1)/2;
+            if(ordenado[i].getFirstDirector().compareToIgnoreCase(ordenado[pai].getFirstDirector()) > 0 || (ordenado[i].getFirstDirector().compareToIgnoreCase(ordenado[pai].getFirstDirector()) == 0 && ordenado[i].getTITLE().compareToIgnoreCase(ordenado[pai].getTITLE()) > 0))
+            {
+                SHOW temp = ordenado[i];
+                ordenado[i] = ordenado[pai];
+                ordenado[pai] = temp;
+            }
+        }
+
+    }
+
+    static void reconstruir(SHOW[] ordenado, int tam)
+    {
+        int i = 0;
+        while(possuiFilho(i,tam) == true)
+        {
+            int filho = maiorFilho(ordenado, i, tam);
+            int cmpDirector = ordenado[i].getFirstDirector().compareToIgnoreCase(ordenado[filho].getFirstDirector());
+            int cmpTitulo = ordenado[i].getTITLE().compareToIgnoreCase(ordenado[filho].getTITLE());
+            comparacoes++;
+            if (cmpDirector < 0 || (cmpDirector == 0 && cmpTitulo < 0)) {
+                SHOW temp = ordenado[i];
+                ordenado[i] = ordenado[filho];
+                ordenado[filho] = temp;
+                i = filho;
+            }
+            else{
+                i = tam;
+            }
+
+        }
+
+    }
+
+
+    static boolean possuiFilho(int i, int tam) {
+        boolean possui = false;
+        if((2*i+1) < tam)
+        {
+            possui = true;
+            comparacoes++;
+        } 
+        return possui;
+    }
+
+    static int maiorFilho(SHOW[] ordenado, int i , int tam)
+    {
+        int filhoEsq = 2*i+1;
+        int filhoDir = 2*i+2;
+        int maior = filhoEsq;
+        if(filhoDir < tam)
+        {
+            comparacoes++;
+            int cmp = ordenado[filhoDir].getFirstDirector().compareToIgnoreCase(ordenado[filhoEsq].getFirstDirector());
+
+            if(cmp > 0 || (cmp == 0 && ordenado[filhoDir].getTITLE().compareToIgnoreCase(ordenado[filhoEsq].getTITLE()) > 0))
+            {
+                maior = filhoDir;
+            }
+        }
+        
+        return maior;
+    }
+    
+
+    
 }

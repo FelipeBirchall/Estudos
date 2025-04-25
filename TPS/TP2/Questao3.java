@@ -290,14 +290,19 @@ public class Questao3 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String entrada;
 
+        String entrada;
         SHOW[] shows = new SHOW[300];
+
         int index = 0;
+        int comparacoes = 0;
+
+        long tempoInicial = System.currentTimeMillis();
+ 
 
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
-                BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+                BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
                 String linha = br.readLine(); // pula o cabeçalho
                 boolean encontrado = false;
 
@@ -330,10 +335,11 @@ public class Questao3 {
             boolean encontrado = false;
             for(int i = 0; i < index; i++)
             {
+                comparacoes++;
                 if(titulo.equals(shows[i].getTITLE()))
                 {
                    encontrado = true;
-                   i = index;
+                   i = index;     
                 }
             }
             if(encontrado)
@@ -344,6 +350,18 @@ public class Questao3 {
                 System.out.println("NAO");
             }
             titulo = sc.nextLine();
+        }
+
+        long tempoFinal = System.currentTimeMillis();
+        long tempoExecucao = tempoFinal - tempoInicial;
+
+        //Criando arquivo.txt
+        try {
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_sequencial.txt", "UTF-8");
+            arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
+            arquivo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         sc.close();

@@ -286,7 +286,7 @@ class SHOW {
 
 }
 
-public class Questao7 {
+public class Questao11 {
 
     static int comparacoes = 0;
 
@@ -326,9 +326,9 @@ public class Questao7 {
         } catch (IOException e) {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
- 
-        ordenar(index, shows);
 
+        ordenar(shows, index);
+        
         for(int i = 0; i < index; i++)
         {
             shows[i].imprimir();
@@ -339,35 +339,64 @@ public class Questao7 {
 
         //Criando arquivo.txt
         try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_insercao.txt", "UTF-8");
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_countingsort.txt", "UTF-8");
             arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
             arquivo.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         sc.close();
     }
 
 
-    //Ordenacao por Inserscao
-    static void ordenar(int index, SHOW[] shows)
+
+
+    static int getMaior(SHOW[] shows, int index)
     {
-        
+        int maior = 0;
+        for(int i = 0; i < index; i++)
+        {
+            if(shows[i].getRELEASE_YEAR() > maior){maior = shows[i].getRELEASE_YEAR();}
+        }
+        return maior;
+    }
+
+
+    //CountingSort
+    static void ordenar(SHOW[] shows, int index)
+    {
+        int[] count = new int[getMaior(shows, index) + 1];
+        SHOW[] ordenador = new SHOW[index];
+
+        for(int i = 0; i < index; count[shows[i].getRELEASE_YEAR()]++, i++);
+
+        for(int i = 1; i < count.length; count[i] += count[i-1], i++);
+
+        for(int i = index-1 ; i >= 0;i--)
+        {
+            int ano = shows[i].getRELEASE_YEAR();
+            ordenador[count[ano] - 1] = shows[i];
+            count[ano]--;
+        }
+
+        for (int i = 0; i < index; i++) {
+            shows[i] = ordenador[i];
+        }
+
+        //Ordenação por inserção em ordem alfabética
         for(int i = 1; i < index; i++)
         {
             SHOW temp = shows[i];
             int j = i-1;
-            while(j >=0 && (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) > 0 ||
-            (shows[j].getTYPE().compareToIgnoreCase(temp.getTYPE()) == 0 &&
-             shows[j].getTITLE().compareToIgnoreCase(temp.getTITLE()) > 0)))
+            while((j >= 0) && shows[j].getRELEASE_YEAR() == temp.getRELEASE_YEAR() && shows[j].getTITLE().compareToIgnoreCase(temp.getTITLE()) > 0)
             {
+                comparacoes++;
                 shows[j+1] = shows[j];
                 j--;
-                comparacoes++;
             }
             shows[j+1] = temp;
         }
+
     }
 }

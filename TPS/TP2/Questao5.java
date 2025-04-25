@@ -287,7 +287,8 @@ class SHOW {
 }
 
 public class Questao5 {
-
+    
+        static int comparacoes = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String entrada;
@@ -295,9 +296,11 @@ public class Questao5 {
         SHOW[] shows = new SHOW[300];
         int index = 0;
 
+        long tempoInicial = System.currentTimeMillis();
+
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
-                BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+                BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
                 String linha = br.readLine(); // pula o cabeçalho
                 boolean encontrado = false;
 
@@ -323,7 +326,31 @@ public class Questao5 {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        //Ordenar
+        ordenar(index, shows);
+
+        for(int i = 0; i < index; i++)
+        {
+            shows[i].imprimir();
+        }
+
+        long tempoFinal = System.currentTimeMillis();
+        long tempoExecucao = tempoFinal - tempoInicial;
+
+        //Criando arquivo.txt
+        try {
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_selecao.txt", "UTF-8");
+            arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
+            arquivo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        sc.close();
+    }
+
+    //Ordenacao por Selecao
+    static void ordenar(int index, SHOW[] shows)
+    {
         for(int i = 0; i < index-1; i++)
         {
             int menor = i;
@@ -332,6 +359,7 @@ public class Questao5 {
                 if(shows[menor].getTITLE().compareToIgnoreCase(shows[j].getTITLE()) > 0)
                 {
                     menor = j;
+                    comparacoes++;
                 }
             }
             SHOW temp = new SHOW();
@@ -340,10 +368,5 @@ public class Questao5 {
             shows[i] = temp;
             
         }
-        for(int i = 0; i < index; i++)
-        {
-            shows[i].imprimir();
-        }
-        sc.close();
     }
 }

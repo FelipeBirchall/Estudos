@@ -357,6 +357,7 @@ public class Questao11 {
         int maior = 0;
         for(int i = 0; i < index; i++)
         {
+            comparacoes++;
             if(shows[i].getRELEASE_YEAR() > maior){maior = shows[i].getRELEASE_YEAR();}
         }
         return maior;

@@ -17,7 +17,7 @@ public class Main {
 
         countingsort(n, array);
 
-
+        sc.close();
 
     }
 

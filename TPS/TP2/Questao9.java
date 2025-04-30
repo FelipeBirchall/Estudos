@@ -372,7 +372,6 @@ public class Questao9 {
         int tam = n;
         while(tam > 1)
         {
-            comparacoes++;
             SHOW temp = ordenado[0];
             ordenado[0] = ordenado[tam-1];
             ordenado[tam-1] = temp;
@@ -391,8 +390,8 @@ public class Questao9 {
     {
         for(int i = tam - 1; i > 0; i = (i - 1) / 2)
         {
-            comparacoes++;
             int pai = (i-1)/2;
+            comparacoes++;
             if(ordenado[i].getFirstDirector().compareToIgnoreCase(ordenado[pai].getFirstDirector()) > 0 || (ordenado[i].getFirstDirector().compareToIgnoreCase(ordenado[pai].getFirstDirector()) == 0 && ordenado[i].getTITLE().compareToIgnoreCase(ordenado[pai].getTITLE()) > 0))
             {
                 SHOW temp = ordenado[i];
@@ -432,7 +431,6 @@ public class Questao9 {
         if((2*i+1) < tam)
         {
             possui = true;
-            comparacoes++;
         } 
         return possui;
     }
@@ -444,9 +442,8 @@ public class Questao9 {
         int maior = filhoEsq;
         if(filhoDir < tam)
         {
-            comparacoes++;
             int cmp = ordenado[filhoDir].getFirstDirector().compareToIgnoreCase(ordenado[filhoEsq].getFirstDirector());
-
+            comparacoes++;
             if(cmp > 0 || (cmp == 0 && ordenado[filhoDir].getTITLE().compareToIgnoreCase(ordenado[filhoEsq].getTITLE()) > 0))
             {
                 maior = filhoDir;

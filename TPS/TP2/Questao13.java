@@ -286,9 +286,12 @@ class SHOW {
 
 }
 
-public class Questao5 {
-    
-        static int comparacoes = 0;
+public class Questao13 {
+
+    static int comparacoes = 0;
+
+    static int[] min = new int[300];
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String entrada;
@@ -326,7 +329,9 @@ public class Questao5 {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        ordenar(index, shows);
+
+        mergesort(shows, 0, index-1);
+        
 
         for(int i = 0; i < index; i++)
         {
@@ -338,7 +343,7 @@ public class Questao5 {
 
         //Criando arquivo.txt
         try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_selecao.txt", "UTF-8");
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_mergesort.txt", "UTF-8");
             arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
             arquivo.close();
         } catch (Exception e) {
@@ -348,25 +353,67 @@ public class Questao5 {
         sc.close();
     }
 
-    //Ordenacao por Selecao
-    static void ordenar(int index, SHOW[] shows)
+
+    static void mergesort(SHOW[] shows, int esq,int dir)
     {
-        for(int i = 0; i < index-1; i++)
+        comparacoes++;
+        if(esq < dir)
         {
-            int menor = i;
-            for(int j = i+1; j < index; j++)
-            {
-                comparacoes++;
-                if(shows[menor].getTITLE().compareToIgnoreCase(shows[j].getTITLE()) > 0)
-                {
-                    menor = j;
-                }
-            }
-            SHOW temp = new SHOW();
-            temp = shows[menor];
-            shows[menor] = shows[i];
-            shows[i] = temp;
-            
+            int meio = (esq+dir)/2;
+
+            mergesort(shows, esq, meio);
+            mergesort(shows, meio+1, dir);
+            merge(shows, esq, meio, dir);
         }
+        
     }
+
+    static void merge(SHOW[] shows, int esq, int meio, int dir)
+    {
+        int n1 = meio - esq + 1;
+        int n2 = dir - meio;
+
+        SHOW[] E = new SHOW[n1];
+        SHOW[] D = new SHOW[n2];
+
+        for(int i = 0; i < n1; i++)
+        {
+            E[i] = shows[esq + i]; 
+        }
+        for(int j = 0; j < n2; j++)
+        {
+            D[j] = shows[meio + 1 + j];
+        }
+
+        int i = 0, j = 0;
+        int k = esq;
+        while(i < n1 && j < n2)
+        {
+            comparacoes++;
+            if(E[i].getDURATION().compareTo(D[j].getDURATION()) < 0 || (E[i].getDURATION().compareTo(D[j].getDURATION()) == 0 && E[i].getTITLE().compareToIgnoreCase(D[j].getTITLE()) < 0))
+            {
+                shows[k] = E[i];
+                i++;
+            }
+            else if(E[i].getDURATION().compareTo(D[j].getDURATION()) > 0 || (E[i].getDURATION().compareTo(D[j].getDURATION()) == 0 && E[i].getTITLE().compareToIgnoreCase(D[j].getTITLE()) > 0)) {
+                shows[k] = D[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            shows[k] = E[i];
+            i++;
+            k++;
+        }
+        while (j < n2) {
+            shows[k] = D[j];
+            j++;
+            k++;
+        }
+
+
+    }
+    
 }

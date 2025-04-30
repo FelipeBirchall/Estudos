@@ -286,17 +286,15 @@ class SHOW {
 
 }
 
-public class Questao5 {
+public class Questao18 {
+
     
-        static int comparacoes = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String entrada;
 
         SHOW[] shows = new SHOW[300];
         int index = 0;
-
-        long tempoInicial = System.currentTimeMillis();
 
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
@@ -326,47 +324,55 @@ public class Questao5 {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        ordenar(index, shows);
-
-        for(int i = 0; i < index; i++)
+        int k = 10; // limite da ordenação
+        
+        quicksortParcial(shows, 0, index-1, k);
+        
+        for(int i = 0; i < k; i++)
         {
             shows[i].imprimir();
-        }
-
-        long tempoFinal = System.currentTimeMillis();
-        long tempoExecucao = tempoFinal - tempoInicial;
-
-        //Criando arquivo.txt
-        try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_selecao.txt", "UTF-8");
-            arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
-            arquivo.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         sc.close();
     }
 
-    //Ordenacao por Selecao
-    static void ordenar(int index, SHOW[] shows)
+    // QuickSort Parcial
+    static public void quicksortParcial(SHOW[] shows, int esq, int dir, int k)
     {
-        for(int i = 0; i < index-1; i++)
-        {
-            int menor = i;
-            for(int j = i+1; j < index; j++)
-            {
-                comparacoes++;
-                if(shows[menor].getTITLE().compareToIgnoreCase(shows[j].getTITLE()) > 0)
-                {
-                    menor = j;
-                }
-            }
-            SHOW temp = new SHOW();
-            temp = shows[menor];
-            shows[menor] = shows[i];
-            shows[i] = temp;
-            
-        }
+       int i = esq;
+       int j = dir;
+       SHOW pivo = shows[(esq+dir)/2];
+       while(i<=j)
+       {
+         while(shows[i].getDATE_ADDED().compareTo(pivo.getDATE_ADDED()) < 0 || (shows[i].getDATE_ADDED().compareTo(pivo.getDATE_ADDED()) == 0 && shows[i].getTITLE().compareToIgnoreCase(pivo.getTITLE()) < 0))
+         {
+            i++;
+         }
+         while(shows[j].getDATE_ADDED().compareTo(pivo.getDATE_ADDED()) > 0 || (shows[j].getDATE_ADDED().compareTo(pivo.getDATE_ADDED()) == 0 && shows[j].getTITLE().compareToIgnoreCase(pivo.getTITLE()) > 0))
+         {
+            j--;
+         }
+         if(i <= j)
+         {
+            SHOW temp = shows[i];
+            shows[i] = shows[j];
+            shows[j] = temp;
+            i++;
+            j--;
+         }
+         if(esq < j)
+         {
+            quicksortParcial(shows, esq, j, k);
+         }
+         if(i < k && i < dir)
+         {
+            quicksortParcial(shows, i, dir, k);
+         }
+       }
+
+        
     }
+
+ 
+    
 }

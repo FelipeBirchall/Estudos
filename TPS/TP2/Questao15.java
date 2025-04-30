@@ -286,17 +286,15 @@ class SHOW {
 
 }
 
-public class Questao5 {
+public class Questao15 {
+
     
-        static int comparacoes = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String entrada;
 
         SHOW[] shows = new SHOW[300];
         int index = 0;
-
-        long tempoInicial = System.currentTimeMillis();
 
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
@@ -326,47 +324,35 @@ public class Questao5 {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        ordenar(index, shows);
-
-        for(int i = 0; i < index; i++)
+        int k = 10; // limite da ordenação
+        selecaoParcial(shows, index, k);
+        
+        for(int i = 0; i < k; i++)
         {
             shows[i].imprimir();
-        }
-
-        long tempoFinal = System.currentTimeMillis();
-        long tempoExecucao = tempoFinal - tempoInicial;
-
-        //Criando arquivo.txt
-        try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_selecao.txt", "UTF-8");
-            arquivo.printf("844448\t%d \t%d \n", tempoExecucao, comparacoes);
-            arquivo.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         sc.close();
     }
 
-    //Ordenacao por Selecao
-    static void ordenar(int index, SHOW[] shows)
+
+    // Seleção Parcial
+    static void selecaoParcial(SHOW[] shows, int index, int k)
     {
-        for(int i = 0; i < index-1; i++)
+        for(int i = 0; i < k; i++)
         {
             int menor = i;
             for(int j = i+1; j < index; j++)
             {
-                comparacoes++;
                 if(shows[menor].getTITLE().compareToIgnoreCase(shows[j].getTITLE()) > 0)
                 {
                     menor = j;
                 }
             }
-            SHOW temp = new SHOW();
-            temp = shows[menor];
-            shows[menor] = shows[i];
-            shows[i] = temp;
-            
+            SHOW temp = shows[i];
+            shows[i] = shows[menor];
+            shows[menor] = temp;
         }
     }
+    
 }

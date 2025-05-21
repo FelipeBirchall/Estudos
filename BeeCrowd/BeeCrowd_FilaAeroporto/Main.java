@@ -2,10 +2,6 @@ package BeeCrowd_FilaAeroporto;
 
 import java.util.Scanner;
 
-class Fila{
-    
-}
-
 public class Main {
     public static void main(String[] args) {
 
@@ -20,118 +16,81 @@ public class Main {
        String[] leste = new String[100]; // -4
        int indexL = 0;
 
-       String entrada = "-5";
+       String entrada = sc.next();
+       String direcaoAtual = "";
        while(!entrada.equals("0"))
        {
-         entrada = sc.nextLine();
-         switch (entrada){
-            case "-4":
-                String subEntrada = sc.nextLine();
-                
-                break;
-         
-            default:
-                break;
-         }
-         // atribuindo avioes do leste
-         if(entrada.equals("-4"))
-         {
-            boolean posAlterada = false;
-            while(posAlterada == false)
-            {
-                String temp = sc.next();
-                if(temp.startsWith("-") || temp.equals("0"))
-                {
-                    entrada = temp;
-                    posAlterada = true;
-                }
-                else{
-                    leste[indexL] = temp;
-                    indexL++;
-                    
-                }
-            }
-         }
-
-        // atribuindo avioes do norte
-        else if(entrada.equals("-3"))
+        if(entrada.startsWith("-"))
         {
-           boolean posAlterada = false;
-           while(posAlterada == false)
-           {
-               String temp = sc.next();
-               if(temp.startsWith("-") || temp.equals("0"))
-               {
-                   entrada = temp;
-                   posAlterada = true;
-               }
-               else{
-                   norte[indexN] = temp;
-                   indexN++;
-               }
-           }
+            direcaoAtual = entrada;
         }
+        else{
+            switch (direcaoAtual) {
+                case "-4":
+                    leste[indexL++] = entrada;
+                    break;
+            
+                case "-3":
+                    norte[indexN++] = entrada;
+                    break;
 
-         // atribuindo avioes do sul
-         else if(entrada.equals("-2"))
-         {
-            boolean posAlterada = false;
-            while(posAlterada == false)
-            {
-                String temp = sc.next();
-                if(temp.startsWith("-") || temp.equals("0"))
-                {
-                    entrada = temp;
-                    posAlterada = true;
-                }
-                else{
-                    sul[indexS] = temp;
-                    indexS++;
-                }
+                case "-2":
+                    sul[indexS++] = entrada;
+                    break;
+                
+                case "-1":
+                    oeste[indexO++] = entrada;
+                    break;
+                
+                default:
+                    break;
             }
-         }
+        }
+            entrada = sc.next();
+       }
+       impressaoFila(norte, sul, leste, oeste);
 
-         // atribuindo avioes do oeste
-         else if(entrada.equals("-1"))
-         {
-            boolean posAlterada = false;
-            while(posAlterada == false)
+    }
+
+
+    
+    static void impressaoFila(String[] norte , String [] sul, String[] leste, String[] oeste)
+    {
+        // -3      // -2      // -4      // -1      
+        int n = 0; int s = 0; int l = 0; int o = 0;
+        while((n != tamanho(norte)) || (s != tamanho(sul)) || (l != tamanho(leste)) || (o != tamanho(oeste))){
+    
+            if(o != tamanho(oeste))
             {
-                String temp = sc.next();
-                if(temp.startsWith("-") || temp.equals("0"))
-                {
-                    entrada = temp;
-                    posAlterada = true;
-                }
-                else{
-                    oeste[indexO] = temp;
-                    indexO++;
-                }
+                System.out.print(oeste[o]+ " ");
+                o++;
             }
-         }
-       }
-       System.out.println("LESTE = -4");
-       for(int i = 0; i < indexL; i++)
-       {
-         System.out.println(leste[i]);
-       }
+            if(n != tamanho(norte))
+            {
+                System.out.print(norte[n] + " ");
+                n++;
+            }
+            if(s != tamanho(sul))
+            {
+                System.out.print(sul[s] + " ");
+                s++;
+            }
+            if(l != tamanho(leste))
+            {
+                System.out.print(leste[l] + " ");
+                l++;
+            }
+        }
+    }
 
-       System.out.println("NORTE = -3");
-       for(int i = 0; i < indexN; i++)
+    static int tamanho(String[] vetor)
+    {
+       int tam = 0;
+       int index = 0;
+       while(vetor[index++] != null)
        {
-         System.out.println(norte[i]);
+            tam++;
        }
-
-       System.out.println("SUL = -2");
-       for(int i = 0; i < indexS; i++)
-       {
-         System.out.println(sul[i]);
-       }
-
-       System.out.println("OESTE = -1");
-       for(int i = 0; i < indexO; i++)
-       {
-         System.out.println(oeste[i]);
-       }
+       return tam;
     }
 }

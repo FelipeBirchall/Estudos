@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+import Area_teste.Celula;
+import Area_teste.Lista;
+
 // Class Célula
 class Celula{
 

@@ -7,7 +7,7 @@ class SHOW {
     private String SHOW_ID;
     private String TYPE;
     private String TITLE;
-    private String DIRECTOR[];
+    private String[] DIRECTOR;
     private String[] CAST;
     private String COUNTRY;
     private Date DATE_ADDED;

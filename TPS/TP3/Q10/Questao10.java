@@ -1,75 +1,124 @@
+package Q10;
 import java.io.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 
-class Celula{
-    SHOW show;
-    Celula prox;
 
-    public Celula()
-    {
-        this.show = null;
-        this.prox = null;
-    }
+class Celula{
+    Celula prox, ant;
+    SHOW show;
+
+    public Celula(){}
 
     public Celula(SHOW show)
     {
         this.show = show;
-        this.prox = null;
+        this.prox = this.ant = null;
     }
 }
 
-class PilhaFlexivel{
-    Celula topo;
-
-    public PilhaFlexivel()
+class ListaDupla{
+    Celula primeiro, ultimo;
+    int comparacoes = 0;
+    public ListaDupla()
     {
-        topo = null;
+        primeiro = new Celula();
+        ultimo = primeiro;
     }
 
-    public void inserir(SHOW s)
-    {
-        Celula tmp = new Celula(s);
-        tmp.prox = topo;
-        topo = tmp;
-        tmp = null;
+    public int getComparacoes() {
+        return comparacoes;
     }
     
-    public SHOW remover()
+    public void inserir(SHOW show)
     {
-        SHOW s = topo.show;
-        Celula tmp = topo;
-        topo = topo.prox;
-        tmp.prox = null;
-        tmp = null;
-        return s;
-    }
-
-    public void mostrar()
-    {
-        int tam = tamanho() - 1;
-        for(Celula i = topo; i != null; i = i.prox)
-        {
-            SHOW tmp = new SHOW();
-            tmp = i.show;
-            System.out.print("[" + tam + "] ");
-            tmp.imprimir();
-            tam--;           
-        }
+        ultimo.prox = new Celula(show);
+        ultimo.prox.ant = ultimo;
+        ultimo = ultimo.prox;
     }
 
     public int tamanho()
     {
         int tam = 0;
-        for(Celula i = topo; i != null; i = i.prox)
-        {
-            tam++;
-        }
+        for(Celula i = primeiro.prox; i != null; i = i.prox){tam++;}
         return tam;
     }
+
+    public void mostrar()
+    {
+        for(Celula i = primeiro.prox; i != null; i = i.prox)
+        {
+            i.show.imprimir();
+        }
+    }
+
+    // QuickSort para ordenar por DATE_ADDED e TITLE como desempate
+    public void quickSort() {
+        quickSortRec(primeiro.prox, ultimo);
+    }
+
+    private void quickSortRec(Celula inicio, Celula fim) {
+        if (inicio != null && fim != null && inicio != fim && inicio.ant != fim) {
+            Celula pivo = particiona(inicio, fim);
+            if (pivo != null && pivo.ant != null) {
+                quickSortRec(inicio, pivo.ant);
+            }
+            if (pivo != null && pivo.prox != null) {
+                quickSortRec(pivo.prox, fim);
+            }
+        }
+    }
+
+    private Celula particiona(Celula inicio, Celula fim) {
+        SHOW pivo = fim.show;
+        Celula i = inicio.ant;
+
+        for (Celula j = inicio; j != fim; j = j.prox) {
+            if (comparar(j.show, pivo) <= 0) {
+                i = (i == null) ? inicio : i.prox;
+                trocar(i, j);
+            }
+        }
+        i = (i == null) ? inicio : i.prox;
+        trocar(i, fim);
+        return i;
+    }
+
+    private void trocar(Celula i, Celula j) {
+        if (i != j) {
+            SHOW temp = i.show;
+            i.show = j.show;
+            j.show = temp;
+        }
+    }
+
+    private int comparar(SHOW s1, SHOW s2) {
+        // Comparação por DATE_ADDED
+        if (s1.getDATE_ADDED() == null && s2.getDATE_ADDED() == null) {
+            comparacoes++;
+            return s1.getTITLE().compareTo(s2.getTITLE());
+        }
+        if (s1.getDATE_ADDED() == null) {
+            comparacoes++;
+            return -1;
+        }
+        if (s2.getDATE_ADDED() == null) {
+            comparacoes++;
+            return 1;
+        }
+        int cmp = s1.getDATE_ADDED().compareTo(s2.getDATE_ADDED());
+        // Se as datas forem iguais, usa TITLE como desempate
+        if (cmp == 0) {
+            comparacoes++;
+            return s1.getTITLE().compareTo(s2.getTITLE());
+        }
+        return cmp;
+    }
+   
 }
+
 
 class SHOW {
     private String SHOW_ID;
@@ -354,32 +403,16 @@ class SHOW {
 
 }
 
-public class Questao9 {
+public class Questao10 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+
+        long tempoInicial = System.currentTimeMillis();
         String entrada;
-        SHOW[] shows = new SHOW[1368];
-        int index = 0;
-        
+        ListaDupla lista_dupla = new ListaDupla();
 
-        // atribuindo todos os dados em um array de shows
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
-            String linha = br.readLine(); // pula o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                shows[index] = new SHOW();
-                shows[index].Leitura(linha);
-                index++;
-            }
-
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
-        }
-
-        PilhaFlexivel pilha = new PilhaFlexivel();
         // atribuindo os valores digitados na lista
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
@@ -393,7 +426,7 @@ public class Questao9 {
                     if (linha.startsWith(entrada + ",")) {
                         SHOW tmp = new SHOW(); //objeto show temporário utilizado para atribuir os dados para a lista
                         tmp.Leitura(linha);
-                        pilha.inserir(tmp);
+                        lista_dupla.inserir(tmp);
                         encontrado = true;
                     } else {
                         linha = br.readLine(); // só continua lendo se ainda não encontrou
@@ -410,42 +443,21 @@ public class Questao9 {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        int n = sc.nextInt();
-        sc.nextLine();
-        for(int i = 0; i < n; i++)
-        {
-            entrada = sc.nextLine();
-            if(entrada.startsWith("I"))
-            {
-                String partes[] = entrada.split(" ");
-                pilha.inserir(localizar(partes[1], shows, index));
-            }
-            else if(entrada.startsWith("R"))
-            {
-                SHOW tmp = pilha.remover();
-                if(tmp != null)
-                {
-                    System.out.println("(R) " + tmp.getTITLE());
-                }
-            }
-            
-        }
-        pilha.mostrar();
-        sc.close();
-    }
+        lista_dupla.quickSort();
+        lista_dupla.mostrar();
 
-    static SHOW localizar(String id, SHOW s[], int index)
-    {
-        SHOW tmp = new SHOW();
-        for(int i = 0; i < index; i++)
-        {
-            if(id.compareTo(s[i].getID()) == 0)
-            {
-                tmp = s[i];
-                i = index;
-            }
+        long tempoFinal = System.currentTimeMillis();
+        long tempoExecucao = tempoFinal - tempoInicial;
+
+        //Criando arquivo.txt
+        try {
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_sequencial.txt", "UTF-8");
+            arquivo.printf("844448\t%d \t%d \n", tempoExecucao, lista_dupla.getComparacoes());
+            arquivo.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return tmp;
+
     }
 
 }

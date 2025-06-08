@@ -1,4 +1,4 @@
-package ListaFlexivelDupla;
+
 
 import java.util.Scanner;
 
@@ -98,6 +98,11 @@ class ListaDupla{
             i = null;
         }
         return elemento;
+    }
+
+    public void quicksort()
+    {
+
     }
 
     public void mostrar()

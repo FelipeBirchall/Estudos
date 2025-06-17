@@ -1,3 +1,4 @@
+package BST;
 import java.util.Scanner;
 
 class No{

@@ -11,6 +11,8 @@ class No{
     }
 }
 
+
+// Arvore BST
 class Arvore{
     No raiz;
 

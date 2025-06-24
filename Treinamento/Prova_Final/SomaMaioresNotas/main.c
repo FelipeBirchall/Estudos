@@ -6,9 +6,7 @@ int main(){
 
     int N;
     int K;
-   while (scanf("%d %d", &N, &K) != EOF) {
-        if (N <= 0 || K <= 0 || N > 100000 || K > N) continue;
-        
+   while (scanf("%i %i", &N, &K) != EOF) {
         int notas[N];
         for(int i = 0; i < N; i++){
             scanf("%i" , &notas[i]);

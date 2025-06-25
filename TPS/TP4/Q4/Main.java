@@ -1,33 +1,33 @@
-package Q3_prototipo;
+package Q4;
+
 import java.io.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 class No{
-    public SHOW show;
-    public No dir, esq;
-    public int nivel;
+    No esq, dir;
+    SHOW show;
+    boolean cor;
 
-    public No(SHOW s){
-        this.show = s;
-        this.dir = this.esq = null;
-        this.nivel = 1;
+    public No(SHOW show){
+        this.show = show;
+        esq = null; dir = null;
+        cor = false;
     }
 
-    public void setNivel() {
-        this.nivel = Math.max(getNivel(esq), getNivel(dir)) + 1;
+    public No(SHOW show, boolean cor){
+        this.show = show;
+        this.cor = cor;
+        esq = null; dir = null;
     }
 
-    public static int getNivel(No no) {
-        return (no == null) ? 0 : no.nivel;
-    }
 }
+
 
 class Arvore{
     No raiz;
     int comparacoes = 0;
-
     public Arvore(){
         this.raiz = null;
     }
@@ -37,102 +37,177 @@ class Arvore{
     }
 
     public void inserir(SHOW s){
-        raiz = inserir(s, raiz);
+        if(raiz == null){
+            raiz = new No(s);
+        }
+        else if(raiz.esq == null && raiz.dir == null){
+            if(s.getTITLE().compareTo(raiz.show.getTITLE()) < 0){
+                raiz.esq = new No(s);
+            }
+            else{
+                raiz.dir = new No(s);
+            }
+        }
+        else if(raiz.esq == null){
+            if(s.getTITLE().compareTo(raiz.show.getTITLE()) < 0){
+                raiz.esq = new No(s);
+            }
+            else if(s.getTITLE().compareTo(raiz.dir.show.getTITLE()) < 0){
+                raiz.esq = new No(raiz.show);
+                raiz.show = s;
+            }
+            else{
+                raiz.esq = new No(raiz.show);
+                raiz.show = raiz.dir.show;
+                raiz.dir.show = s;
+            }
+
+            raiz.esq.cor = false; raiz.dir.cor = false;
+        }
+        else if(raiz.dir == null){
+            if(s.getTITLE().compareTo(raiz.show.getTITLE()) > 0){
+                raiz.dir = new No(s);
+            }
+            else if(s.getTITLE().compareTo(raiz.esq.show.getTITLE()) > 0){
+                raiz.dir = new No(raiz.show);
+                raiz.show = s;
+            }
+            else{
+                raiz.dir = new No(raiz.show);
+                raiz.show = raiz.esq.show;
+                raiz.esq.show = s;
+            }
+
+            raiz.esq.cor = false; raiz.dir.cor = false;
+        }
+        else{
+            inserir(s, null, null, null, raiz);
+        }
+        raiz.cor = false;
     }
-    private No inserir(SHOW s, No i){
+
+    private void inserir(SHOW s, No bisavo, No avo, No pai, No i){
         if(i == null){
-            i = new No(s);
+            if( s.getTITLE().compareTo(pai.show.getTITLE()) < 0){
+                i = pai.esq = new No(s, true);
+            }
+            else{
+                i = pai.dir = new No(s, true);
+            }
+            if(pai.cor == true){
+                balancear(bisavo, avo, pai, i);
+            }
         }
-        else if(s.getTITLE().compareTo(i.show.getTITLE()) < 0){
-            i.esq = inserir(s, i.esq);
+        else{
+            if(i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true){
+                i.cor = true; 
+                i.esq.cor = false; 
+                i.dir.cor = false;
+
+                if(i == raiz){
+                    i.cor = false;
+                }
+                else if(pai.cor == true){
+                    balancear(bisavo, avo, pai, i);
+                }
+            }
+            if(s.getTITLE().compareTo(i.show.getTITLE()) < 0){
+                inserir(s, avo, pai, i, i.esq);
+            }            
+            else if(s.getTITLE().compareTo(i.show.getTITLE()) > 0){
+                inserir(s, avo, pai, i, i.dir);
+            }
         }
-        else if(s.getTITLE().compareTo(i.show.getTITLE()) > 0){
-            i.dir = inserir(s, i.dir);
-        }
-        return balancear(i);
     }
 
-    private No balancear(No no){
-        if(no != null){
-            int fator = No.getNivel(no.esq) - No.getNivel(no.dir);
-            // se estiver balanceada
-            if(Math.abs(fator) <= 1){
-                no.setNivel();
-            }
-            // se estiver desbalanceada para a direita
-            else if(fator == 2){
-                int fatorFilhoDir = No.getNivel(no.dir.dir) - No.getNivel(no.dir.esq);
-                // Se o filho a direita tambem estiver desbalanceado
-                if(fatorFilhoDir == -1){
-                    no.dir = rotacionarDir(no.dir);
+    private void balancear(No bisavo, No avo, No pai, No i){
+        comparacoes++; 
+        if(pai.cor == true){
+            comparacoes++;
+            if(pai.show.getTITLE().compareTo(avo.show.getTITLE()) > 0){
+                comparacoes++;
+                if(i.show.getTITLE().compareTo(pai.show.getTITLE()) > 0){
+                    avo = rotacaoEsq(avo);
                 }
-                no = rotacionarEsq(no); 
-            }
-            // Se desbalanceada para a esquerda
-            else if(fator == -2){
-                int fatorFilhoEsq = No.getNivel(no.esq.dir) - No.getNivel(no.esq.esq);
-                // Se o filho a esquerda tambem estiver desbalanceado
-                if(fatorFilhoEsq == 1){
-                    no.esq = rotacionarEsq(no.esq);
+                else{
+                    avo = rotacaoDirEsq(avo);
                 }
-                no = rotacionarDir(no);
             }
+            else{
+                comparacoes++;
+                if(i.show.getTITLE().compareTo(pai.show.getTITLE()) < 0){
+                    avo = rotacaoDir(avo);
+                }
+                else{
+                    avo = rotacaoEsqDir(avo);
+                }
+            }
+            if(bisavo == null){
+                raiz = avo;
+            } 
+            else if(avo.show.getTITLE().compareTo(bisavo.show.getTITLE()) < 0){
+                bisavo.esq = avo;
+            } 
+            else {
+                bisavo.dir = avo;
+            }
+            avo.cor = false;
+            avo.esq.cor = avo.dir.cor = true;
         }
-        return no;
     }
 
-    private No rotacionarDir(No no){
+    private No rotacaoDir(No no){
         No noEsq = no.esq;
         No noEsqDir = noEsq.dir;
-
+        
         noEsq.dir = no;
         no.esq = noEsqDir;
-
-        no.setNivel();
-        noEsq.setNivel();
         return noEsq;
     }
-
-    private No rotacionarEsq(No no){
+    private No rotacaoEsq(No no){
         No noDir = no.dir;
         No noDirEsq = noDir.esq;
 
         noDir.esq = no;
         no.dir = noDirEsq;
-
-        no.setNivel();
-        noDir.setNivel();
         return noDir;
     }
-
-    public boolean pesquisar(String s){
-        System.out.print("raiz ");
-        return pesquisar(s, raiz); 
+    private No rotacaoDirEsq(No no){
+        no.dir = rotacaoDir(no.dir);
+        return rotacaoEsq(no);
     }
-    private boolean pesquisar(String s, No i){
+    private No rotacaoEsqDir(No no){
+        no.esq = rotacaoEsq(no.esq);
+        return rotacaoDir(no);
+    }
+
+    public boolean pesquisar(String nome){
+        System.out.print("=>raiz  ");
+        return pesquisar(nome, raiz);
+    }
+    private boolean pesquisar(String nome, No i){
         boolean resp;
         if(i == null){
             comparacoes++;
             resp = false;
         }
-        else if(s.compareTo(i.show.getTITLE()) == 0){
+        else if(nome.compareTo(i.show.getTITLE()) == 0){
             comparacoes++;
             resp = true;
         }
-        else if(s.compareTo(i.show.getTITLE()) < 0){
-            System.out.print("esq ");
+        else if( nome.compareTo(i.show.getTITLE()) < 0){
             comparacoes++;
-            resp = pesquisar(s, i.esq);
+            System.out.print("esq ");
+            resp = pesquisar(nome, i.esq);
         }
         else{
-            System.out.print("dir ");
             comparacoes++;
-            resp = pesquisar(s, i.dir);
+            System.out.print("dir ");
+            resp = pesquisar(nome, i.dir);
         }
         return resp;
     }
 }
-
 
 class SHOW {
     private String SHOW_ID;
@@ -430,7 +505,7 @@ public class Main {
 
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
-                BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
+                BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
                 String linha = br.readLine(); // pula o cabeçalho
                 boolean encontrado = false;
 
@@ -462,10 +537,10 @@ public class Main {
         {
             if(arvore.pesquisar(titulo) == true)
             {
-                System.out.println(" SIM");
+                System.out.println("SIM");
             }
             else{
-                System.out.println(" NAO");
+                System.out.println("NAO");
             }
             titulo = sc.nextLine();
         }
@@ -475,7 +550,7 @@ public class Main {
 
         //Criando arquivo.txt
         try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_avl.txt", "UTF-8");
+            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_alviNegra.txt", "UTF-8");
             arquivo.printf("844448\t%d\t%d \n", tempoExecucao, arvore.getComparacoes());
             arquivo.close();
         } catch (Exception e) {

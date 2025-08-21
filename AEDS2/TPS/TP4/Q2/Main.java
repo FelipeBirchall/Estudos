@@ -1,132 +1,117 @@
-package Q2_prototipo;
 import java.io.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 
-// No por Release Year
-class No{
+class NoArvoreSecundaria {
+    String chave;
     SHOW show;
-    No esq, dir;
-    ArvoreInterna arvoreInterna;
-
-    public No(SHOW show){
+    NoArvoreSecundaria esq, dir;
+    public NoArvoreSecundaria(SHOW show) {
+        this.chave = show.getTITLE();
         this.show = show;
-        arvoreInterna = new ArvoreInterna();
         this.esq = this.dir = null;
     }
 }
 
-// No por Title
-class NoInterno{
-    SHOW show;
-    NoInterno esq, dir;
+class ArvoreSecundaria {
+    NoArvoreSecundaria raiz;
+    public ArvoreSecundaria() {
+        raiz = null;
+    }
+    public void inserir(SHOW show) {
+        raiz = inserir(raiz, show);
+    }
+    private NoArvoreSecundaria inserir(NoArvoreSecundaria no, SHOW show) {
+        if (no == null) {
+            no = new NoArvoreSecundaria(show);
+        } else if (show.getTITLE().compareTo(no.chave) < 0) {
+            no.esq = inserir(no.esq, show);
+        } else if (show.getTITLE().compareTo(no.chave) > 0) {
+            no.dir = inserir(no.dir, show);
+        }
+        return no;
+    }
+    public boolean pesquisa(String titulo, boolean printRaiz) {
+        if (printRaiz) System.out.print("raiz ");
+        return pesquisa(raiz, titulo);
+    }
+    private boolean pesquisa(NoArvoreSecundaria no, String titulo) {
+        if (no == null) return false;
+        if (titulo.equals(no.chave)) return true;
+        else if (titulo.compareTo(no.chave) < 0) {
+            System.out.print("esq ");
+            return pesquisa(no.esq, titulo);
+        } else {
+            System.out.print("dir ");
+            return pesquisa(no.dir, titulo);
+        }
+    }
+}
 
-    public NoInterno(SHOW s){
-        this.show = s;
+class NoArvorePrincipal {
+    int chave;
+    NoArvorePrincipal esq, dir;
+    ArvoreSecundaria arvoreSecundaria;
+    public NoArvorePrincipal(int chave) {
+        this.chave = chave;
         this.esq = this.dir = null;
+        this.arvoreSecundaria = new ArvoreSecundaria();
     }
 }
 
-class ArvoreInterna{
-    NoInterno raiz;
-    public ArvoreInterna(){
-        this.raiz = null;
+class Arvore {
+    NoArvorePrincipal raiz;
+    public Arvore() {
+        int[] chaves = {7, 3, 11, 1, 5, 9, 13, 0, 2, 4, 6, 8, 10, 12, 14};
+        for (int chave : chaves) inserirAno(chave);
     }
 
-    public void inserir(SHOW s){
-        raiz = inserir(s, raiz);
-    }
-    private NoInterno inserir(SHOW s, NoInterno i){
-        if(i == null){
-            i = new NoInterno(s);
-        }
-        else if(s.getTITLE().compareTo(i.show.getTITLE()) < 0){
-            i.esq = inserir(s, i.esq);
-        }
-        else if(s.getTITLE().compareTo(i.show.getTITLE()) > 0){
-            i.dir = inserir(s, i.dir);
-        }
-        return i;  
+    private void inserirAno(int chave) {
+        raiz = inserirAno(chave, raiz);
     }
 
-    public boolean pesquisar(String nome){
-        return pesquisar(nome, raiz);
-    }
-    private boolean pesquisar(String nome, NoInterno i){
-        boolean resp;
-        if(i == null){
-            resp = false;
-        }
-        else if(nome.equals(i.show.getTITLE())){
-            resp = true;
-        }
-        else if(nome.compareTo(i.show.getTITLE()) < 0){
-            resp = pesquisar(nome, i.esq);
-        }
-        else{
-            resp = pesquisar(nome, i.dir);
-        }
-        return resp;
-    }
-}
-
-class Arvore{
-    No raiz;
-    public Arvore(){
-        this.raiz = null;
+    private NoArvorePrincipal inserirAno(int chave, NoArvorePrincipal no) {
+        if (no == null) return new NoArvorePrincipal(chave);
+        if (chave < no.chave) no.esq = inserirAno(chave, no.esq);
+        else if (chave > no.chave) no.dir = inserirAno(chave, no.dir);
+        return no;
     }
 
-    public void inserir(SHOW s){
-        raiz = inserir(s, raiz);
-    }
-    private No inserir(SHOW s, No i){
-        if(i == null){
-            i = new No(s);
-        }
-        else if(s.getRELEASE_YEAR() < i.show.getRELEASE_YEAR()){
-            i.esq = inserir(s, i.esq);
-        }
-        else if(s.getRELEASE_YEAR() > i.show.getRELEASE_YEAR()){
-            i.dir = inserir(s, i.dir);
-        }
-        else{
-            i.arvoreInterna.inserir(s);
-        }
-        return i;
+    public void inserir(SHOW s) {
+        int mod = s.getRELEASE_YEAR() % 15;
+        inserir(s, mod, raiz);
     }
 
-    public boolean pesquisar(String nome){
-        System.out.print("raiz");
-        return pesquisar(nome, raiz); 
-    }
-    private boolean pesquisar(String nome, No i){
-        boolean resp;
-        if(i == null){
-            resp = false;
-        }
-        else if(i.show.getTITLE().equals(nome)){
-            resp = true;
-        }
-        else{
-            resp = i.arvoreInterna.pesquisar(nome);
-            if(resp == false){
-                
-            }
-        }
-        // Continua a busca nas subárvores esquerda e direita
-        return pesquisar(nome, i.esq) || pesquisar(nome, i.dir);
+    private void inserir(SHOW s, int mod, NoArvorePrincipal no) {
+        if (no == null) return;
+        if (mod == no.chave) no.arvoreSecundaria.inserir(s);
+        else if (mod < no.chave) inserir(s, mod, no.esq);
+        else inserir(s, mod, no.dir);
     }
 
-    
+    public boolean pesquisar(String titulo) {
+        return pesquisa(raiz, titulo, true);
+    }
+
+    private boolean pesquisa(NoArvorePrincipal no, String titulo, boolean printRaiz) {
+        if (no == null) return false;
+        boolean achou = no.arvoreSecundaria.pesquisa(titulo, printRaiz);
+        if (achou) return true;
+        System.out.print(" ESQ ");
+        if (pesquisa(no.esq, titulo, false)) return true;
+        System.out.print(" DIR ");
+        if (pesquisa(no.dir, titulo, false)) return true;
+        return false;
+    }
 }
 
 class SHOW {
     private String SHOW_ID;
     private String TYPE;
     private String TITLE;
-    private String DIRECTOR[];
+    private String[] DIRECTOR;
     private String[] CAST;
     private String COUNTRY;
     private Date DATE_ADDED;
@@ -140,7 +125,6 @@ class SHOW {
 
     public SHOW(String SHOW_ID, String TYPE, String TITLE, String[] DIRECTOR, String[] CAST, String COUNTRY,
             Date DATE_ADDED, int RELEASE_YEAR, String RATING, String DURATION, String[] LISTED_IN) {
-
         setID(SHOW_ID);
         setTYPE(TYPE);
         setTITLE(TITLE);
@@ -156,7 +140,6 @@ class SHOW {
 
     public SHOW clone() {
         SHOW clonado = new SHOW();
-
         clonado.setID(this.SHOW_ID);
         clonado.setTYPE(this.TYPE);
         clonado.setTITLE(this.TITLE);
@@ -168,49 +151,46 @@ class SHOW {
         clonado.setRELEASE_YEAR(this.RELEASE_YEAR);
         clonado.setDURATION(this.DURATION);
         clonado.setLISTED_IN(this.LISTED_IN);
-
         return clonado;
-
     }
-
-    // FUNÇÕES SET
 
     public void setID(String SHOW_ID) {
         this.SHOW_ID = SHOW_ID;
     }
 
     private void setTYPE(String TYPE) {
-        if (TYPE == "") {
+        if (TYPE == null || TYPE.isEmpty()) {
             TYPE = "NaN";
         }
         this.TYPE = TYPE;
     }
 
     private void setTITLE(String TITLE) {
-        if (TITLE == "") {
+        if (TITLE == null || TITLE.isEmpty()) {
             TITLE = "NaN";
         }
         this.TITLE = TITLE;
     }
 
     private void setDIRECTOR(String[] DIRECTOR) {
-        if (DIRECTOR[0] == "") {
-            DIRECTOR[0] = "NaN";
-        }
-        this.DIRECTOR = new String[DIRECTOR.length];
-        for (int i = 0; i < DIRECTOR.length; i++) {
-            this.DIRECTOR[i] = DIRECTOR[i].trim();
+        if (DIRECTOR == null || DIRECTOR.length == 0 || DIRECTOR[0].isEmpty()) {
+            this.DIRECTOR = new String[]{"NaN"};
+        } else {
+            this.DIRECTOR = new String[DIRECTOR.length];
+            for (int i = 0; i < DIRECTOR.length; i++) {
+                this.DIRECTOR[i] = DIRECTOR[i].trim();
+            }
         }
     }
 
     private void setCAST(String[] CAST) {
+        if (CAST == null || CAST.length == 0 || CAST[0].isEmpty()) {
+            CAST = new String[]{"NaN"};
+        }
         for (int i = 0; i < CAST.length; i++) {
             CAST[i] = CAST[i].trim();
         }
         ordenar(CAST);
-        if (CAST[0] == "") {
-            CAST[0] = "NaN";
-        }
         this.CAST = new String[CAST.length];
         for (int i = 0; i < CAST.length; i++) {
             this.CAST[i] = CAST[i].trim();
@@ -218,19 +198,14 @@ class SHOW {
     }
 
     private void setCOUNTRY(String COUNTRY) {
-        if (COUNTRY == "") {
+        if (COUNTRY == null || COUNTRY.isEmpty()) {
             COUNTRY = "NaN";
         }
         this.COUNTRY = COUNTRY;
     }
 
     private void setDATE_ADDED(Date DATE_ADDED) {
-        if (DATE_ADDED == null) {
-            this.DATE_ADDED = null;
-        } else {
-            this.DATE_ADDED = DATE_ADDED;
-        }
-
+        this.DATE_ADDED = DATE_ADDED;
     }
 
     private void setRELEASE_YEAR(int RELEASE_YEAR) {
@@ -238,34 +213,32 @@ class SHOW {
     }
 
     private void setRATING(String RATING) {
-        if (RATING == "") {
+        if (RATING == null || RATING.isEmpty()) {
             RATING = "NaN";
         }
         this.RATING = RATING;
     }
 
     private void setDURATION(String DURATION) {
-        if (DURATION == "") {
+        if (DURATION == null || DURATION.isEmpty()) {
             DURATION = "NaN";
         }
         this.DURATION = DURATION;
     }
 
     private void setLISTED_IN(String[] LISTED_IN) {
+        if (LISTED_IN == null || LISTED_IN.length == 0 || LISTED_IN[0].isEmpty()) {
+            LISTED_IN = new String[]{"NaN"};
+        }
         for (int i = 0; i < LISTED_IN.length; i++) {
             LISTED_IN[i] = LISTED_IN[i].trim();
         }
         ordenar(LISTED_IN);
-        if (LISTED_IN[0] == "") {
-            LISTED_IN[0] = "NaN";
-        }
         this.LISTED_IN = new String[LISTED_IN.length];
         for (int i = 0; i < LISTED_IN.length; i++) {
             this.LISTED_IN[i] = LISTED_IN[i].trim();
         }
     }
-
-    // FUNÇÕES GET
 
     public String getID() {
         return SHOW_ID;
@@ -322,8 +295,6 @@ class SHOW {
         System.out.print(LISTED_IN[LISTED_IN.length - 1] + "] ##");
     }
 
-    // OUTRAS FUNÇÕES
-
     public void Leitura(String entrada) {
         List<String> partes = new ArrayList<>();
         boolean dentroAspas = false;
@@ -331,14 +302,13 @@ class SHOW {
 
         for (int i = 0; i < entrada.length(); i++) {
             char c = entrada.charAt(i);
-
             if (c == '"') {
-                dentroAspas = !dentroAspas; // alterna se está dentro de aspas
+                dentroAspas = !dentroAspas;
             } else if (c == ',' && !dentroAspas) {
                 partes.add(atual.toString().trim());
-                atual.setLength(0); // limpa o StringBuilder
+                atual.setLength(0);
             } else {
-                atual.append(c); // adiciona o character no StringBuilder
+                atual.append(c);
             }
         }
         partes.add(atual.toString().trim());
@@ -351,7 +321,7 @@ class SHOW {
         setCOUNTRY(partes.get(5));
 
         Date date_added = null;
-        if (partes.get(6) != null && !partes.get(6).isEmpty()) {
+        if (!partes.get(6).isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
                 date_added = sdf.parse(partes.get(6));
@@ -366,7 +336,6 @@ class SHOW {
         setRATING(partes.get(8));
         setDURATION(partes.get(9));
         setLISTED_IN(partes.get(10).split(","));
-
     }
 
     private void ordenar(String[] Lista) {
@@ -377,12 +346,10 @@ class SHOW {
                     menor = j;
                 }
             }
-
             String temp = Lista[menor];
             Lista[menor] = Lista[i];
             Lista[i] = temp;
         }
-
     }
 
     public void imprimir() {
@@ -390,39 +357,32 @@ class SHOW {
         getDIRECTOR();
         getCAST();
         System.out.print(getCOUNTRY() + " ## ");
-
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         if (getDATE_ADDED() != null) {
             System.out.print(sdf.format(getDATE_ADDED()) + " ## ");
         } else {
             System.out.print("NaN ## ");
         }
-
         System.out.print(getRELEASE_YEAR() + " ## " + getRATING() + " ## " + getDURATION() + " ## ");
         getLISTED_IN();
         System.out.println();
     }
-
 }
 
-public class Main {
 
+public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
         String entrada;
         Arvore arvore = new Arvore();
 
-        long tempoInicial = System.currentTimeMillis();
- 
-
         try {
             while (!(entrada = sc.nextLine()).equals("FIM")) {
-                BufferedReader br = new BufferedReader(new FileReader("tmp/disneyplus.csv"));
-                String linha = br.readLine(); // pula o cabeçalho
+                BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
+                String linha = br.readLine();
                 boolean encontrado = false;
 
-                linha = br.readLine(); // lê a primeira linha de dados
+                linha = br.readLine();
                 while (linha != null && !encontrado) {
                     if (linha.startsWith(entrada + ",")) {
                         SHOW tmp = new SHOW();
@@ -430,46 +390,28 @@ public class Main {
                         arvore.inserir(tmp);
                         encontrado = true;
                     } else {
-                        linha = br.readLine(); // só continua lendo se ainda não encontrou
+                        linha = br.readLine();
                     }
                 }
 
                 if (!encontrado) {
                     System.out.println("Show ID " + entrada + " não encontrado.");
                 }
-
                 br.close();
             }
         } catch (IOException e) {
             System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
         }
 
-        
         String titulo = sc.nextLine();
-        while(!titulo.equals("FIM"))
-        {
-            if(arvore.pesquisar(titulo) == true)
-            {
+        while (!titulo.equals("FIM")) {
+            if (arvore.pesquisar(titulo)) {
                 System.out.println(" SIM");
-            }
-            else{
+            } else {
                 System.out.println(" NAO");
             }
             titulo = sc.nextLine();
         }
-
-        long tempoFinal = System.currentTimeMillis();
-        long tempoExecucao = tempoFinal - tempoInicial;
-
-        //Criando arquivo.txt
-        try {
-            java.io.PrintWriter arquivo = new java.io.PrintWriter("matricula_arvoreBinaria.txt", "UTF-8");
-            arquivo.printf("844448\t%d\t%d \n", tempoExecucao);
-            arquivo.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         sc.close();
     }
 }

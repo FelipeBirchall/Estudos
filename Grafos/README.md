@@ -24,7 +24,7 @@ Implementa uma lista encadeada simples.
 
 Principais métodos:
 
-* `inserirFim(int x)` → insere um elemento no final da lista
+* `inserir(int x)` → insere um elemento no final da lista
 * `mostrar()` → percorre e imprime os elementos da lista
 
 ## Armazenamento do Grafo

@@ -25,7 +25,7 @@ class Lista {
         ultimo = primeiro = new Celula();
     }
 
-    public void inserirFim(int x) {
+    public void inserir(int x) {
         ultimo.prox = new Celula(x);
         ultimo = ultimo.prox;
     }
@@ -83,8 +83,8 @@ public class GrafoDirecionado {
                 int origem = Integer.parseInt(partes[0]);
                 int destino = Integer.parseInt(partes[1]);
 
-                adjOut[origem].inserirFim(destino);
-                adjIn[destino].inserirFim(origem);
+                adjOut[origem].inserir(destino);
+                adjIn[destino].inserir(origem);
             }
 
             br.close();

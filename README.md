@@ -23,6 +23,3 @@ O repositório poderá conter estudos sobre:
 - Desenvolvimento web e backend
 - Inteligência Artificial e tópicos diversos
 
-## Contribuições
-Este repositório é voltado para meus estudos pessoais, mas sugestões e dicas sempre serão bem-vindas!  
-

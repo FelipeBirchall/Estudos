@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebGIS Saúde BH — Farmácias e Laboratórios</title>
+
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>🏥 WebGIS Saúde BH</h1>
+    <p>Localização de farmácias e laboratórios de radiografia próximos a um hospital em Belo Horizonte</p>
+  </header>
+
+  <main class="app-layout">
+    <aside class="panel">
+      <section class="panel-block">
+        <h2>1. Hospital de referência</h2>
+        <select id="hospital-select"></select>
+      </section>
+
+      <section class="panel-block">
+        <h2>2. Categoria</h2>
+        <div class="radio-group" id="categoria-group">
+          <label><input type="radio" name="categoria" value="farmacia" checked /> Farmácias</label>
+          <label><input type="radio" name="categoria" value="laboratorio" /> Laboratórios de radiografia</label>
+          <label><input type="radio" name="categoria" value="hospital" /> Hospitais</label>
+        </div>
+      </section>
+
+      <section class="panel-block">
+        <h2>3. Raio de busca</h2>
+        <div class="radio-group" id="raio-group">
+          <label><input type="radio" name="raio" value="200" /> 200 m</label>
+          <label><input type="radio" name="raio" value="500" checked /> 500 m</label>
+          <label><input type="radio" name="raio" value="1000" /> 1000 m</label>
+          <label><input type="radio" name="raio" value="2000" /> 2000 m</label>
+        </div>
+        <label class="raio-custom">
+          Raio personalizado (m):
+          <input type="number" id="raio-custom-input" min="50" step="50" placeholder="ex.: 800" />
+        </label>
+      </section>
+
+      <section class="panel-block">
+        <h2>4. Ordenar por</h2>
+        <div class="radio-group">
+          <label><input type="radio" name="ordenar" value="distancia" checked /> Distância (mais próximo primeiro)</label>
+          <label><input type="radio" name="ordenar" value="alfabetica" /> Ordem alfabética</label>
+        </div>
+      </section>
+
+      <section class="panel-block">
+        <h2>5. Camadas espaciais (linha / polígono)</h2>
+        <label class="checkbox-row">
+          <input type="checkbox" id="toggle-bairro" />
+          Exibir bairro (polígono) — testa operador <strong>contém</strong>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" id="toggle-rota" />
+          Exibir via/rota (linha) — testa operador <strong>intercepta</strong>
+        </label>
+        <div id="spatial-info" class="spatial-info"></div>
+      </section>
+
+      <button id="btn-buscar" class="btn-buscar">🔎 Buscar</button>
+
+      <section class="panel-block">
+        <h2>Resultados <span id="resultados-count"></span></h2>
+        <ul id="resultados-lista" class="resultados-lista"></ul>
+      </section>
+    </aside>
+
+    <section class="map-wrapper">
+      <div id="map"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    Protótipo acadêmico — dados ilustrativos, não representam um cadastro real de estabelecimentos.
+  </footer>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="vendor/turf/turf.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

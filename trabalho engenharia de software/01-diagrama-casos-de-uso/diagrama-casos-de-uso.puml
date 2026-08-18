@@ -1,0 +1,66 @@
+@startuml DiagramaCasosDeUso_WebGIS_Saude_BH
+left to right direction
+skinparam packageStyle rect
+skinparam usecase {
+  BackgroundColor #F5FAFF
+  BorderColor #2C5F8A
+}
+title Diagrama de Casos de Uso — WebGIS de Saúde (Belo Horizonte)
+
+' ===================== Atores =====================
+actor "Usuário do Sistema" as Usuario
+actor "Familiar do Paciente" as Familiar
+actor "Médico" as Medico
+
+Familiar --|> Usuario
+Medico --|> Usuario
+
+' ===================== Fronteira do sistema =====================
+rectangle "Sistema WebGIS de Saúde - Belo Horizonte" {
+
+  usecase "Selecionar Hospital\n(ponto de referência)" as UC1
+  usecase "Definir Raio de Busca" as UC2
+  usecase "Filtrar por Categoria\n(hospital / farmácia / laboratório)" as UC3
+  usecase "Realizar Consulta Espacial" as UC4
+  usecase "Aplicar operador:\nEstá Contido" as UC4a
+  usecase "Aplicar operador:\nContém" as UC4b
+  usecase "Aplicar operador:\nIntercepta" as UC4c
+  usecase "Localizar Farmácias Próximas" as UC5
+  usecase "Localizar Laboratórios de\nRadiografia Próximos" as UC6
+  usecase "Listar Resultados por Distância" as UC7
+  usecase "Ordenar Resultados\nAlfabeticamente" as UC7b
+  usecase "Visualizar Resultados no Mapa" as UC8
+}
+
+' ===================== Associações ator - caso de uso =====================
+Usuario -- UC1
+Usuario -- UC2
+Usuario -- UC3
+Usuario -- UC7
+Usuario -- UC8
+
+Familiar -- UC5
+Medico -- UC6
+
+' ===================== Include =====================
+UC5 ..> UC1 : <<include>>
+UC5 ..> UC2 : <<include>>
+UC5 ..> UC3 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC5 ..> UC7 : <<include>>
+UC5 ..> UC8 : <<include>>
+
+UC6 ..> UC1 : <<include>>
+UC6 ..> UC2 : <<include>>
+UC6 ..> UC3 : <<include>>
+UC6 ..> UC4 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC6 ..> UC8 : <<include>>
+
+' ===================== Extend =====================
+UC4a ..> UC4 : <<extend>>
+UC4b ..> UC4 : <<extend>>
+UC4c ..> UC4 : <<extend>>
+UC7b ..> UC7 : <<extend>>
+
+@enduml

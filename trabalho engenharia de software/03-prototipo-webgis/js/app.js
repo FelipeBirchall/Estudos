@@ -11,8 +11,8 @@
 
   const CATEGORIA_STYLE = {
     hospital: { emoji: "🏥", cor: "#c62828" },
-    farmacia: { emoji: "💊", cor: "#2e7d32" },
-    laboratorio: { emoji: "🩻", cor: "#1565c0" },
+    farmacia: { emoji: "💊", cor: "#dcc816" },
+    laboratorio: { emoji: "🧪", cor: "#0d6b08" },
   };
 
   // -------------------- Estado --------------------

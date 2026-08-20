@@ -1,4 +1,5 @@
 # Trabalho de Engenharia de Software — WebGIS de Saúde (Belo Horizonte)
+### Feito por Felipe Birchal e Filipe Lorenzato
 
 ## Tema
 
